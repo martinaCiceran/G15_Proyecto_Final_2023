@@ -66,6 +66,12 @@ app.get('/', function(req, res)
     res.render('inicio', null);
 });
 
+app.get('/tetris', function(req, res)
+{
+    console.log(req.query);
+    res.render('tetris', null);
+});
+
 // app.get('/irAregistro', function(req, res)
 // {
 //     console.log("Soy un pedido GET", req.query);
