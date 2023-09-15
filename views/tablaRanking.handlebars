@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar</title>
+</head>
+<body>
+    <section class="section-login-registro" style="margin-top: 50px;">
+
+        <div class="mb-3 form-group">
+            <h2><strong>RANKING</strong></h2>
+        </div>
+
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Puntaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each puntaje}}
+                        <tr>
+                            <td>{{this.usuario}}</td>
+                            <td>{{this.puntaje}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+    
+</body>
+</html>
