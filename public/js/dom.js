@@ -65,3 +65,8 @@ function generarPiezasRandom(){
     let y = 0;
     return(pieza,x,y,colorPieza);
 }
+
+function renderizarPieza(){
+    let pieza = piezaObj.pieza;
+    
+}
