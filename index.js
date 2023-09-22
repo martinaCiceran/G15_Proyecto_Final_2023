@@ -30,23 +30,23 @@ app.listen(Listen_Port, function() {
     console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
 });
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// // Import the functions you need from the SDKs you need
+// import { initializeApp } from "firebase/app";
+// // TODO: Add SDKs for Firebase products that you want to use
+// // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBoj1-dKAFqCSuKFsAPkgcuPtbYt76zjWk",
-  authDomain: "tetris-836ea.firebaseapp.com",
-  projectId: "tetris-836ea",
-  storageBucket: "tetris-836ea.appspot.com",
-  messagingSenderId: "685696744451",
-  appId: "1:685696744451:web:9edb4a8f6a248d73cee236"
-};
+// // Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBoj1-dKAFqCSuKFsAPkgcuPtbYt76zjWk",
+//   authDomain: "tetris-836ea.firebaseapp.com",
+//   projectId: "tetris-836ea",
+//   storageBucket: "tetris-836ea.appspot.com",
+//   messagingSenderId: "685696744451",
+//   appId: "1:685696744451:web:9edb4a8f6a248d73cee236"
+// };
 
-// Initialize Firebase
-const fb = initializeApp(firebaseConfig); // const app = ....
+// // Initialize Firebase
+// const fb = initializeApp(firebaseConfig); // const app = ....
 
 /*
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
