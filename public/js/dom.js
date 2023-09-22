@@ -58,7 +58,9 @@ ctx.scale(30,30) // 30 * 20(filas) = 600(handlebaras) -- 30 * 10(filas) = 300(ha
 // scale() --> agrega una transformación de escala a las unidades del lienzo horizontal y/o verticalmente.
 
 let piezaObj = null;
-console.log(piezaObj)
+let cuadricula = generarCuadricula()
+console.log(cuadricula);
+// console.log(piezaObj)
 function generarPiezaRandom(){
     let ran = Math.floor(Math.random() * 7) // devuelve un numero random del 0 al 7 --> Math.floor() devuelve un numero sin coma
     // console.log(FORMAS[ran])
@@ -80,18 +82,16 @@ function generarPiezaRandom(){
      */ 
 }
 
-
 setInterval(nuevoEstadoDeJuego,500) // genera un intervalo donde cada 500 milisegundos, se ejecuta la funcion nuevoEstadoDeJuego
 
 function nuevoEstadoDeJuego(){
-    if(piezaObj == null){
+    if(piezaObj == null){ // si piezaObj es igual a null, generar pieza random y renderizarla
         piezaObj = generarPiezaRandom();
         renderizarPieza()
     }
     moverAbajo()
 }
 
-renderizarPieza()
 function renderizarPieza(){
     let pieza = piezaObj.pieza; // llama al atributo pieza del objeto
     for(let i = 0; i<pieza.length;i++){ 
@@ -105,6 +105,115 @@ function renderizarPieza(){
 }
 
 function moverAbajo(){
-    piezaObj.y+=1; // cambia coordenadas de y para que baje una fila
+    if(!colision(piezaObj.x, piezaObj.y+1)){
+        piezaObj.y+=1; // cambia coordenadas de y para que baje una fila
+    }else{ 
+        for(let i = 0; i<piezaObj.pieza.length;i++){
+            for(let j = 0;j<piezaObj.pieza[i].length;j++){
+                if(piezaObj.pieza[i][j] == 1){
+                    let p = piezaObj.x + j;
+                    let q = piezaObj.y + i;
+                    cuadricula[q][p] = piezaObj.colorIndex;
+                }
+            }
+        }
+        if(piezaObj.y == 0){
+            alert("Game Over")
+            cuadricula = generarCuadricula()
+        }
+        piezaObj = null;
+    }
+    renderizarCuadricula()
+}
+
+function moverIzquierda(){
+    if(!colision(piezaObj.x-1, piezaObj.y)){ //  si no hay colision, la pieza se mueve
+        piezaObj.x -=1
+    }
+    renderizarCuadricula()
+}
+
+function moverDerecha(){
+    if(!colision(piezaObj.x+1, piezaObj.y)){
+        piezaObj.x +=1
+    }
+    renderizarCuadricula()
+}
+
+function rotar(){
+    let piezaRotada = [];
+    let pieza = piezaObjCayendo.pieza;
+    for(let i = 0; i<pieza.length;i++){
+        piezaRotada.push([])
+        for(let j = 0;j<pieza[i].length; j++){
+            piezaRotada[i].push(0);
+        }
+    }
+    for(let i = 0; pieza.length;i++){
+        for(let j = 0; j<pieza[i].length;j++){
+            piezaRotada[i][j] = pieza[j][i];
+        }
+    }
+
+    for(let i = 0;i<piezaRotada.length;i++){
+        piezaRotada[i] = piezaRotada[i].reverse();
+    }
+    if(!colision(piezaObjCayendo.x, piezaObjCayendo.y, pieza)){
+        
+    }
+}
+
+function colision(x,y){ // esta funcio sirve para que la pieza no se vaya del tablero
+    let pieza = piezaObj.pieza;
+    for(let i = 0;i<pieza.length; i++){
+        for(let j = 0; j<pieza[i].length;j++){
+            if(pieza[i][j] == 1){
+                let p = x + j;
+                let q = y + i;
+                if(p>=0 && p<COLUMNAS && q>= 0 && q<FILAS){
+                    if(cuadricula[q][p]>0){
+                        return true
+                    }
+                } else{
+                    return true
+                }
+            }
+        }
+    }
+    return false
+}
+
+function generarCuadricula(){
+    let cuadricula = [];
+    for(let i=0; i<FILAS;i++){
+        cuadricula.push([])
+        for(let j = 0; j<COLUMNAS;j++){
+            cuadricula[i].push(0)
+        }
+    }
+    return cuadricula
+}
+
+function renderizarCuadricula(){
+    for(let i = 0; i<cuadricula.length;i++){
+        for(let j = 0; j<cuadricula[i].length;j++){
+            ctx.fillStyle = COLORES[cuadricula[i][j]];
+            ctx.fillRect(j,i,1,1);
+        }
+    }
     renderizarPieza()
 }
+
+document.addEventListener("keydown", function(e){
+    let key = e.code;
+    console.log(key)
+    if(key == "ArrowDown"){
+        moverAbajo()
+    } else if(key == "ArrowLeft"){
+        moverIzquierda()
+    }else if(key == "ArrowRight"){
+        moverDerecha()
+    }else if(key == "ArrowUp"){
+       rotar()
+    }
+})
