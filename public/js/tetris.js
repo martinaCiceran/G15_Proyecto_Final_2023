@@ -143,7 +143,7 @@ function moverDerecha(){
 
 function rotar(){
     let piezaRotada = [];
-    let pieza = piezaObjCayendo.pieza;
+    let pieza = piezaObj.pieza;
     for(let i = 0; i<pieza.length;i++){
         piezaRotada.push([])
         for(let j = 0;j<pieza[i].length; j++){
@@ -152,16 +152,17 @@ function rotar(){
     }
     for(let i = 0; pieza.length;i++){
         for(let j = 0; j<pieza[i].length;j++){
-            piezaRotada[i][j] = pieza[j][i];
+            piezaRotada[i][j] = pieza[j][i]; // da vuelta las filas y las columnas para que rote la pieza
         }
     }
 
     for(let i = 0;i<piezaRotada.length;i++){
-        piezaRotada[i] = piezaRotada[i].reverse();
+        piezaRotada[i] = piezaRotada[i].reverse(); // reverse() --> da vuelta el los elementos del array, el que esta primero, va ultimo y asi
     }
-    if(!colision(piezaObjCayendo.x, piezaObjCayendo.y, pieza)){
-        
-    }
+    // if(!colision(piezaObjCayendo.x, piezaObjCayendo.y, piezaRotada)){
+        piezaObj.pieza = piezaRotada        
+    //}
+    renderizarCuadricula()
 }
 
 function colision(x,y){ // esta funcio sirve para que la pieza no se vaya del tablero
