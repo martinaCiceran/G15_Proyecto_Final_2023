@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar</title>
+</head>
+<body>
+    <section class="section-login-registro">
+        <form action="/editarPreguntas" method="post"></form>
+            <div class="mb-3 form-group">
+                <h2><strong>EDITAR</strong></h2>
+            </div>
+
+            <div class="mb-3 form-group">
+                <label for="id_pregunta" class="form-label">Id pregunta</label>
+                <select id="selectPreguntas" onchange="editarPreguntas()">
+                    {{#each preguntas}}
+                        <option value="{{this.id_pregunta}}">{{this.id_pregunta}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            
+            <div class="mb-3 form-group">
+                <label for="agregarPregunta" class="form-label">Agregar Pregunta</label>
+                <input type="text" class="form-control" id="pregunta" name="pregunta" value="" placeholder="Agregar Pregunta">
+            </div>
+            <div class="mb-3 form-group">
+                <label for="op_1" class="form-label">Opcion 1</label>
+                <input type="text" class="form-control" id="op_1" name="op_1" value="" placeholder="Opcion 1">
+            </div>
+            <div class="mb-3 form-group">
+                <label for="op_2" class="form-label">Opcion 2</label>
+                <input type="text" class="form-control" id="op_2" name="op_2" value="" placeholder="Opcion 2">
+            </div>
+            <div class="mb-3 form-group">
+                <label for="op_3" class="form-label">Opcion 3</label>
+                <input type="text" class="form-control" id="op_3" name="op_3" value="" placeholder="Opcion 3">
+            </div>
+            <div class="mb-3 form-group">
+                <label for="op_correcta" class="form-label">Opcion correcta</label>
+                <input type="text" class="form-control" id="op_correcta" name="op_correcta" value="" placeholder="Opción correcta">
+            </div>
+            <div class="form-login-registro">
+                <input type="submit" class="botones" value="Agregar Pregunta">
+            </div>
+        </form>
+        <form action="/" method="post">
+            <div class="mb-3 form-group">
+                <label for="id_pregunta" class="form-label">Id pregunta</label>
+                <input type="text" class="form-control" id="id_pregunta" name="id_pregunta" value="" placeholder="Id pregunta">
+            </div>
+            <div class="mb-3 form-check">
+                <button onclick="modificarPregunta()" class="botones">Modificar</button>
+            </div>
+        </form>
+
+        
+        <div class="mb-3 form-check">
+            <button onclick="eliminarPregunta()" class="botones">Eliminar</button>
+        </div>
+    </section>
+</body>
+</html>

@@ -206,7 +206,7 @@ app.get('/home-admin', function(req, res)
 //     res.send({preguntaMod: respuesta})
 // });
 
-app.post('/ranking', async function(req, res){
+app.get('/ranking', async function(req, res){
     console.log("Pedido post /tablaRanking :)")
     // let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
     // console.log(usuario_puntaje)
