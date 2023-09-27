@@ -30,23 +30,23 @@ app.listen(Listen_Port, function() {
     console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
 });
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// // Import the functions you need from the SDKs you need
+// import { initializeApp } from "firebase/app";
+// // TODO: Add SDKs for Firebase products that you want to use
+// // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBoj1-dKAFqCSuKFsAPkgcuPtbYt76zjWk",
-  authDomain: "tetris-836ea.firebaseapp.com",
-  projectId: "tetris-836ea",
-  storageBucket: "tetris-836ea.appspot.com",
-  messagingSenderId: "685696744451",
-  appId: "1:685696744451:web:9edb4a8f6a248d73cee236"
-};
+// // Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBoj1-dKAFqCSuKFsAPkgcuPtbYt76zjWk",
+//   authDomain: "tetris-836ea.firebaseapp.com",
+//   projectId: "tetris-836ea",
+//   storageBucket: "tetris-836ea.appspot.com",
+//   messagingSenderId: "685696744451",
+//   appId: "1:685696744451:web:9edb4a8f6a248d73cee236"
+// };
 
-// Initialize Firebase
-const fb = initializeApp(firebaseConfig); // const app = ....
+// // Initialize Firebase
+// const fb = initializeApp(firebaseConfig); // const app = ....
 
 /*
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
@@ -60,17 +60,31 @@ const fb = initializeApp(firebaseConfig); // const app = ....
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
 */
 
+
 app.get('/', function(req, res)
 {
     console.log(req.query);
     res.render('inicio', null);
 });
 
-// app.get('/irAregistro', function(req, res)
-// {
-//     console.log("Soy un pedido GET", req.query);
-//     res.render('registro', null);
-// });
+app.get('/tetris', function(req, res)
+{
+    console.log(req.query);
+    res.render('tetris', null);
+});
+
+app.get('/gameOver', function(req, res)
+{
+    console.log("Soy un pedido GET /gameOver", req.query);
+    res.render('gameOver', null);
+});
+
+
+app.get('/registro', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('registro', null);
+});
 
 // app.post('/enviarRegistro', async function(req, res)
 // {
@@ -80,20 +94,20 @@ app.get('/', function(req, res)
 //     res.render('home', null); //Renderizo página "home" sin pasar ningún objeto a Handlebars
 // });
 
-// app.get('/irAlogin', function(req, res)
-// {
-//     console.log("Soy un pedido GET", req.query);
-//     res.render('login', null);
-// });
+app.get('/login', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('login', null);
+});
 
-// app.get('/irAAdmin', async function(req, res)
-// {
-//     console.log("Soy un pedido GET /iraadmin", req.query);
-//     let preguntas = await MySQL.realizarQuery("SELECT id_pregunta FROM Preguntas;");
-//     console.log(preguntas)
-//     // console.log(preguntas[1].id_pregunta)
-//     res.render('administrador', {preguntas: preguntas});
-// });
+app.get('/admin', async function(req, res)
+{
+    console.log("Soy un pedido GET /iraadmin", req.query);
+    // let preguntas = await MySQL.realizarQuery("SELECT id_pregunta FROM Preguntas;");
+    //console.log(preguntas)
+    // console.log(preguntas[1].id_pregunta)
+    res.render('administrador', null/*{preguntas: preguntas}*/);
+});
 
 
 // app.post('/login', async function(req, res)
@@ -124,11 +138,11 @@ app.get('/', function(req, res)
 
 // })
 
-// app.get('/logout', function(req, res)
-// {
-//     console.log("Soy un pedido GET", req.query);
-//     res.render('login', null);
-// });
+app.get('/logout', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('inicio', null);
+});
 
 
 // app.get('/jugar', function(req, res)
@@ -143,11 +157,11 @@ app.get('/', function(req, res)
 //     res.render('inicio', null);
 // });
 
-// app.get('/inicio-admin', function(req, res)
-// {
-//     console.log("Soy un pedido GET", req.query);
-//     res.render('inicio-admin', null);
-// });
+app.get('/home-admin', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('home-admin', null);
+});
 
 // app.post('/home', function(req, res)
 // {
@@ -192,12 +206,12 @@ app.get('/', function(req, res)
 //     res.send({preguntaMod: respuesta})
 // });
 
-// app.post('/tablaRanking', async function(req, res){
-//     console.log("Pedido post /tablaRanking :)")
-//     let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
-//     console.log(usuario_puntaje)
-//     res.render('tablaRanking', {puntaje: usuario_puntaje});
-// })
+app.post('/ranking', async function(req, res){
+    console.log("Pedido post /tablaRanking :)")
+    // let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
+    // console.log(usuario_puntaje)
+    res.render('ranking', null/*{puntaje: usuario_puntaje}*/);
+})
 
 // app.get('/tablaRanking', async function(req, res){
 //     console.log("Pedido get /tablaRanking :)")
