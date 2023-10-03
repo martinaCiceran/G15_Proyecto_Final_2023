@@ -95,3 +95,20 @@ button {
 .close-jugar-btn {
     visibility: hidden;
 }
+
+
+.gris {
+margin: 20px;
+padding: 10px 40px;
+text-align: center;
+text-decoration: none;
+outline: none;
+color: #fff;
+background-color: #CAD8D6 ;
+border:  #000000;
+border-radius: 15px;
+}
+
+.opcion {
+
+}
