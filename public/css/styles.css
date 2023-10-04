@@ -5,7 +5,7 @@
 }
 
 body{
-    background-color: whitesmoke;
+    background-color: ##000000;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -97,18 +97,41 @@ button {
 }
 
 
-.gris {
+#gris {
 margin: 20px;
 padding: 10px 40px;
 text-align: center;
 text-decoration: none;
 outline: none;
-color: #fff;
+color: #000000;
 background-color: #CAD8D6 ;
-border:  #000000;
-border-radius: 15px;
+border color:  #000000;
+border-radius: 50px;
+justify-content: center;
+flex-direction: row;
 }
 
-.opcion {
-
+#bodyy{
+    background-color: #000000;
 }
+
+#violeta {
+margin: 20px;
+padding: 10px 40px;
+text-align: center;
+text-decoration: none;
+outline: none;
+color: #c3aff7;
+background-color: #342162 ;
+border color:  #000000;
+border-radius: 50px;
+justify-content: center;
+flex-direction: row;
+}
+
+#boxblanco{
+box-shadow: #6fd649;
+width: 700;
+height: 400;
+}
+    
