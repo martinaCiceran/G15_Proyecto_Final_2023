@@ -131,7 +131,9 @@ flex-direction: row;
 
 #boxblanco{
 box-shadow: #6fd649;
+background-color: #6fd649;
 width: 700;
 height: 400;
+border-radius: 10px;
 }
     
