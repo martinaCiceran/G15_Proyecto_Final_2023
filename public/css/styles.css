@@ -121,7 +121,7 @@ padding: 10px 40px;
 text-align: center;
 text-decoration: none;
 outline: none;
-color: #c3aff7;
+color: #603cbb;
 background-color: #342162 ;
 border color:  #000000;
 border-radius: 50px;
@@ -130,10 +130,26 @@ flex-direction: row;
 }
 
 #boxblanco{
-box-shadow: #6fd649;
-background-color: #6fd649;
-width: 700;
-height: 400;
-border-radius: 10px;
+box-shadow: #ffffff;
+background-color: #ffffff;
+width: 100%;
+height: 95%;
+border-radius: 50px;
+justify-content: center;
 }
+
+#gris1 {
+    margin: 20px;
+    padding: 30px 90px;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #000000;
+    background-color: #CAD8D6 ;
+    border color:  #000000;
+    border-radius: 50px;
+    justify-content: center;
+    flex-direction: row;
+    vertical-align: middle;
+    }
     
