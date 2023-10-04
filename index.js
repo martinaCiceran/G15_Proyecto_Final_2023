@@ -30,35 +30,29 @@ app.listen(Listen_Port, function() {
     console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
 });
 
-// // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
+const { initializeApp } = require("firebase/app");
+const {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+  GoogleAuthProvider,
+} = require("firebase/auth");
 
-// // Your web app's Firebase configuration
-// const firebaseConfig = {
-//   apiKey: "AIzaSyBoj1-dKAFqCSuKFsAPkgcuPtbYt76zjWk",
-//   authDomain: "tetris-836ea.firebaseapp.com",
-//   projectId: "tetris-836ea",
-//   storageBucket: "tetris-836ea.appspot.com",
-//   messagingSenderId: "685696744451",
-//   appId: "1:685696744451:web:9edb4a8f6a248d73cee236"
-// };
+const firebaseConfig = {
+    apiKey: "AIzaSyB6k56AztBMThTo-2Z3apX8VU8hh8dj9Mg",
+    authDomain: "tetris-proyecto-final.firebaseapp.com",
+    projectId: "tetris-proyecto-final",
+    storageBucket: "tetris-proyecto-final.appspot.com",
+    messagingSenderId: "425385016005",
+    appId: "1:425385016005:web:b3b6a7be809f7429300eac"
+  };
+  
+  const appFirebase = initializeApp(firebaseConfig);
+  const auth = getAuth(appFirebase);
 
-// // Initialize Firebase
-// const fb = initializeApp(firebaseConfig); // const app = ....
 
-/*
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-    A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
-*/
 
 
 app.get('/', function(req, res)
@@ -79,26 +73,47 @@ app.get('/gameOver', function(req, res)
     res.render('gameOver', null);
 });
 
-
-app.get('/registro', function(req, res)
-{
-    console.log("Soy un pedido GET", req.query);
-    res.render('registro', null);
-});
-
-// app.post('/enviarRegistro', async function(req, res)
-// {
-//     console.log("Soy un pedido POST", req.body);
-//     await MySQL.realizarQuery(`INSERT INTO Usuarios(nombre, apellido, dni, usuario, password) VALUES("${req.body.nombre}", "${req.body.apellido}", ${req.body.dni}, "${req.body.usuario}", "${req.body.password}")`)
-//     console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios')))
-//     res.render('home', null); //Renderizo página "home" sin pasar ningún objeto a Handlebars
-// });
-
-app.get('/login', function(req, res)
-{
-    console.log("Soy un pedido GET", req.query);
-    res.render('login', null);
-});
+app.get("/registro", (req, res) => {
+    res.render("registro");
+  });
+  
+  app.post("/enviarRegistro", async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      await authService.registerUser(auth, { email, password });
+      res.render("registro", {
+        message: "Registro exitoso. Puedes iniciar sesión ahora.",
+      });
+    } catch (error) {
+      console.error("Error en el registro:", error);
+      res.render("registro", {
+        message: "Error en el registro: " + error.message,
+      });
+    }
+  });
+  
+  app.get("/login", (req, res) => {
+    res.render("login");
+  });
+  
+  app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const userCredential = await authService.loginUser(auth, {
+        email,
+        password,
+      });
+      // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
+      res.redirect("/inicio");
+    } catch (error) {
+      console.error("Error en el inicio de sesión:", error);
+      res.render("login", {
+        message: "Error en el inicio de sesión: " + error.message,
+      });
+    }
+  });
 
 app.get('/admin', async function(req, res)
 {
@@ -110,34 +125,6 @@ app.get('/admin', async function(req, res)
 });
 
 
-// app.post('/login', async function(req, res)
-// {
-//     //Petición POST con URL = "/login"
-//     console.log("Soy un pedido POST", req.body);
-//     let respuesta = await MySQL.realizarQuery(`SELECT * FROM Usuarios WHERE usuario = "${req.body.usuario}" AND password = "${req.body.contraseña}"`)
-//     //Chequeo el largo del vector a ver si tiene datos
-//     if (respuesta.length > 0) {
-//         //Armo un objeto para responder
-//         console.log(respuesta)
-//         console.log(respuesta[0].es_administrador)
-//         usuarioGlobal = req.body.usuario
-//         res.send({validar: true, admin : respuesta[0].es_administrador})    
-//     }
-//     else{
-//         res.send({validar:false})    
-//     }
-    
-// });
-
-// app.post('/leerPreguntas', async function(req, res)
-// {
-//     console.log("Soy un pedido POST", req.body);
-//     let respuesta = await MySQL.realizarQuery(`SELECT * FROM Preguntas WHERE id_pregunta = ${req.body.id}`)
-
-//     res.send({pregunta: respuesta[0]})
-
-// })
-
 app.get('/logout', function(req, res)
 {
     console.log("Soy un pedido GET", req.query);
@@ -145,66 +132,12 @@ app.get('/logout', function(req, res)
 });
 
 
-// app.get('/jugar', function(req, res)
-// {
-//     console.log("Soy un pedido GET", req.query);
-//     res.render('jugar', null);
-// });
-
-// app.get('/inicio', function(req, res)
-// {
-//     console.log("Soy un pedido GET", req.query);
-//     res.render('inicio', null);
-// });
-
 app.get('/home-admin', function(req, res)
 {
     console.log("Soy un pedido GET", req.query);
     res.render('home-admin', null);
 });
 
-// app.post('/home', function(req, res)
-// {
-//     console.log("Soy un pedido POST", req.body);
-//     res.render('home', null);
-// });
-
-// app.post('/modificarPregunta', async function(req, res)
-// {
-//     console.log("Modificar pregunta :)")
-    
-//     console.log("Soy un pedido POST /modificarPregunta");
-//     let respuesta = await MySQL.realizarQuery(`UPDATE Preguntas SET pregunta = "${req.body.pregunta}", opcion_1 = "${req.body.op_1}", opcion_2 = "${req.body.op_2}", opcion_3 = "${req.body.op_3}", opcion_correcta = "${req.body.op_correcta}" WHERE id_pregunta = ${req.body.id}`)
-//     res.send({preguntaMod: respuesta})
-// });
-
-// app.post('/agregarPregunta', async function(req, res)
-// {
-//     console.log("Agregar pregunta :)")
-//     let preg = req.body.pregunta;
-//     let op1 = req.body.op_1;
-//     let op2 = req.body.op_2;
-//     let op3 = req.body.op_3;
-//     let opCorrecta = req.body.op_correcta;
-    
-//     if(preg == "" || op1 == "" || op2 == "" || op3 == "" || opCorrecta == ""){0
-//         console.log("Uno de los campos esta vacio")   
-//     }
-//     else{
-//         let respuesta = await MySQL.realizarQuery(`INSERT INTO Preguntas(pregunta, opcion_1, opcion_2, opcion_3, opcion_correcta) VALUES("${preg}", "${op1}", "${op2}", "${op3}", "${opCorrecta}")`)
-//         console.log(await (MySQL.realizarQuery('SELECT * FROM Preguntas')))
-//         res.send({preguntaNueva: respuesta})
-//     }
-// });
-
-// app.post('/eliminarPregunta', async function(req, res)
-// {
-//     console.log("Modificar pregunta :)")
-    
-//     console.log("Soy un pedido POST /modificarPregunta");
-//     let respuesta = await MySQL.realizarQuery(`DELETE FROM Preguntas WHERE id_pregunta = ${req.body.id}`)
-//     res.send({preguntaMod: respuesta})
-// });
 
 app.get('/ranking', async function(req, res){
     console.log("Pedido post /tablaRanking :)")
@@ -212,78 +145,3 @@ app.get('/ranking', async function(req, res){
     // console.log(usuario_puntaje)
     res.render('ranking', null/*{puntaje: usuario_puntaje}*/);
 })
-
-// app.get('/tablaRanking', async function(req, res){
-//     console.log("Pedido get /tablaRanking :)")
-//     let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
-//     console.log(usuario_puntaje)
-//     res.render('tablaRanking', {puntaje: usuario_puntaje});
-// })
-
-// app.post('/mostrarPregunta', async(req, res) => {
-//     try {
-//         const indice = req.body.indicePreguntaActual
-//         console.log(indice)
-//             // Realizar la consulta SQL para obtener las preguntas y respuestas desde la base de datos
-//         let result = await MySQL.realizarQuery(`SELECT id_pregunta, pregunta, opcion_1, 
-//         opcion_2, opcion_3, opcion_correcta FROM Preguntas WHERE id_pregunta = "${indice}"`);
-
-//         console.log(result)
-//         // Formatear los datos según sea necesario. row representa cada fila de la base de datos en cada iteración.
-//         // map  se utiliza para iterar sobre cada elemento (fila) del arreglo result y aplicar una función a cada elemento. 
-//         // En este caso, se está transformando cada fila en un nuevo objeto que contiene la información deseada.
-
-//         /* const preguntasRespuestas = result.map(row => ({
-//             id_pregunta: row.id_pregunta,
-//             pregunta: row.pregunta,
-//             opciones: [row.opcion_1, row.opcion_2, row.opcion_3, row.opcion_correcta]
-//         })); */
-
-//         if (result.length == 0) {
-//             //res.redirect('/tablaRanking');
-//             res.send([{validar: false}])
-//         } else {
-//             const preguntasRespuestas = result.map(row => ({
-//                 id_pregunta: row.id_pregunta,
-//                 pregunta: row.pregunta,
-//                 opciones: [row.opcion_1, row.opcion_2, row.opcion_3, row.opcion_correcta],
-//                 validar: true
-//             }));
-    
-//             // Enviar los datos como respuesta al cliente
-//             res.send(preguntasRespuestas);
-//         }
-
-        
-//     } catch (error) {
-//         console.error("Error:", error);
-//     }
-// });
-
-// app.post('/sumarPuntaje', async(req, res)=> {
-//     try {
-//     const usuario = usuarioGlobal;
-//     console.log(usuario)
-//     await MySQL.realizarQuery(`UPDATE Puntaje SET puntaje= puntaje+10 WHERE usuario = "${usuario}"`)
-//     let result = await MySQL.realizarQuery(`SELECT puntaje FROM Puntaje WHERE usuario = "${usuario}"`)
-//     console.log(`El puntaje de ${usuario} se ha incrementado en 10.`);
-//     res.send(result);
-//     }
-//     catch (error) {
-//         console.error("Error:", error);
-//     }
-// });
-
-
-
-// app.put('/login', function(req, res) {
-//     //Petición PUT con URL = "/login"
-//     console.log("Soy un pedido PUT", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método PUT
-//     res.send(null);
-// });
-
-// app.delete('/login', function(req, res) {
-//     //Petición DELETE con URL = "/login"
-//     console.log("Soy un pedido DELETE", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método DELETE
-//     res.send(null);
-// });
