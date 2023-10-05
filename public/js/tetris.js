@@ -274,22 +274,6 @@ function jugar(){
 
 }
 
-// function pausa(){
-//     console.log('pausaasa')
-//     for(let i = 0; i<piezaObj.pieza.length;i++){
-//         for(let j = 0;j<piezaObj.pieza[i].length;j++){
-//             if(piezaObj.pieza[i][j] == 1){
-//                 let p = piezaObj.x + j;
-//                 let q = piezaObj.y + i;
-//                 cuadricula[q][p] = piezaObj.colorIndex;
-//             }
-//         }
-//     }
-
-//     renderizarCuadricula()
-    
-// }
-
 let jugarBtn = document.getElementById('jugar-btn')
 function closePopUp(){
     popup.classList.remove('open-popup');
