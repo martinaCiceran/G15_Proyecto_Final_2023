@@ -51,9 +51,10 @@ const firebaseConfig = {
   
 const appFirebase = initializeApp(firebaseConfig);
 const auth = getAuth(appFirebase);
+const authService = require("./authService");
 
 
-
+/* -------------------------------------------------- */
 
 app.get('/', function(req, res)
 {
