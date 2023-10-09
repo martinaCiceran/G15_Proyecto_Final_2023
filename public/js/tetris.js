@@ -66,6 +66,7 @@ function openPopUp(){
 
 }
 
+
 function jugar(){
 
     let piezaObj = null;
@@ -131,13 +132,11 @@ function jugar(){
         }else if(contador > 3){
             puntaje+=100;
         }
-
-        
-    
-
+ 
         tablaPuntaje.innerHTML = 'Puntaje: ' + puntaje;
 
     }
+
 
     function renderizarPieza(){
         let pieza = piezaObj.pieza; // llama al atributo pieza del objeto
