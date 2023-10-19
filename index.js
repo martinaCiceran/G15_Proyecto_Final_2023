@@ -304,7 +304,7 @@ const {
         password,
       });
       // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
-      res.redirect("/dashboard");
+      res.redirect("/option");
     } catch (error) {
       console.error("Error en el inicio de sesión:", error);
       res.render("login", {
@@ -346,6 +346,12 @@ app.get('/login', function(req, res)
 {
     console.log("Soy un pedido GET", req.query);
     res.render('login', null);
+});
+
+app.get('/option', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('option', null);
 });
 
 app.get('/admin', async function(req, res)
