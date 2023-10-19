@@ -87,11 +87,13 @@ app.get('/login', function(req, res)
 app.get('/admin', async function(req, res)
 {
     console.log("Soy un pedido GET /iraadmin", req.query);
-    // let preguntas = await MySQL.realizarQuery("SELECT id_pregunta FROM Preguntas;");
-    //console.log(preguntas)
+    let usuarios = await MySQL.realizarQuery("SELECT usuario FROM Usuarios_tetris;");
+    console.log(usuarios)
     // console.log(preguntas[1].id_pregunta)
-    res.render('administrador', null/*{preguntas: preguntas}*/);
+    res.render('administrador', {usuarios: usuarios});
 });
+
+
 
 
 app.post('/login', async function(req, res)
@@ -152,33 +154,39 @@ app.get('/home-admin', function(req, res)
 //     res.send({preguntaMod: respuesta})
 // });
 
-// app.post('/agregarPregunta', async function(req, res)
-// {
-//     console.log("Agregar pregunta :)")
-//     let preg = req.body.pregunta;
-//     let op1 = req.body.op_1;
-//     let op2 = req.body.op_2;
-//     let op3 = req.body.op_3;
-//     let opCorrecta = req.body.op_correcta;
+app.post('/agregarUsuario', async function(req, res)
+{
+    console.log("Agregar Usuario")
+    let nombreUsuario = req.body.usuarioNombre;
+    let esAdmin = req.body.selectUsuarios;
     
-//     if(preg == "" || op1 == "" || op2 == "" || op3 == "" || opCorrecta == ""){0
-//         console.log("Uno de los campos esta vacio")   
-//     }
-//     else{
-//         let respuesta = await MySQL.realizarQuery(`INSERT INTO Preguntas(pregunta, opcion_1, opcion_2, opcion_3, opcion_correcta) VALUES("${preg}", "${op1}", "${op2}", "${op3}", "${opCorrecta}")`)
-//         console.log(await (MySQL.realizarQuery('SELECT * FROM Preguntas')))
-//         res.send({preguntaNueva: respuesta})
-//     }
-// });
+    if(nombreUsuario == "" || esAdmin == ""){0
+        console.log("Uno de los campos está vacío")   
+    }
+    else{
+        let respuesta = await MySQL.realizarQuery(`INSERT INTO Usuarios(usuario, adminstrador) VALUES("${nombreUsuario}", "${esAdmin}")`)
+        console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios')))
+        res.send({usuario: respuesta})
+    }
+});
 
-// app.post('/eliminarPregunta', async function(req, res)
-// {
-//     console.log("Modificar pregunta :)")
+app.post('/eliminarUsuario', async function(req, res)
+{
+    console.log("Modificar usuario")
     
-//     console.log("Soy un pedido POST /modificarPregunta");
-//     let respuesta = await MySQL.realizarQuery(`DELETE FROM Preguntas WHERE id_pregunta = ${req.body.id}`)
-//     res.send({preguntaMod: respuesta})
-// });
+    console.log("Soy un pedido POST /modificarUsuario");
+    let respuesta = await MySQL.realizarQuery(`DELETE FROM Usuarios_tetris WHERE id_usuario = ${req.body.id}`)
+    res.send({usuarioMod: respuesta})
+});
+
+app.post('/modificarUsuario', async function(req, res)
+{
+    console.log("Modificar usuario")
+    
+    console.log("Soy un pedido POST /modificarUsuario");
+    let respuesta = await MySQL.realizarQuery(`UPDATE Usuarios SET usuario_nombre = "${req.body.usuario_nombre}", usuario_apellido = "${req.body.usuario_apellido}",  usuario_DNI = "${req.body.usuario_DNI}", usuario_nombreDeUsuario = "${req.body.usuario_nombreDeUsuario}", usuario_contraseña = "${req.body.usuario_contraseña}" WHERE id_usuario = ${req.body.id_usuario}`)
+    res.send({usuarioMod: respuesta})
+});
 
 app.post('/ranking', async function(req, res){
     console.log("Pedido post /tablaRanking :)")
