@@ -26,9 +26,6 @@ app.set('view engine', 'handlebars'); //Inicializo Handlebars
 
 const Listen_Port = 3000; //Puerto por el que estoy ejecutando la página Web
 
-app.listen(Listen_Port, function() {
-    console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
-});
 
 app.use(session({secret: '123456', resave: true, saveUninitialized: true}));
 
@@ -43,6 +40,7 @@ app.use(session({secret: '123456', resave: true, saveUninitialized: true}));
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
 */
+
 
 
 app.get('/', function(req, res)
@@ -102,7 +100,6 @@ app.post('/login', async function(req, res)
     console.log("Soy un pedido POST /login", req.body);
     let respuesta = await MySQL.realizarQuery(`SELECT * FROM Usuarios WHERE usuario = "${req.body.usuario}" AND password = "${req.body.contraseña}"`)
     req.session.user = req.body.usuario
-    
 });
 
 // app.post('/leerPreguntas', async function(req, res)
@@ -113,12 +110,6 @@ app.post('/login', async function(req, res)
 //     res.send({pregunta: respuesta[0]})
 
 // })
-
-app.get('/logout', function(req, res)
-{
-    console.log("Soy un pedido GET", req.query);
-    res.render('inicio', null);
-});
 
 
 // app.get('/jugar', function(req, res)
@@ -132,12 +123,6 @@ app.get('/logout', function(req, res)
 //     console.log("Soy un pedido GET", req.query);
 //     res.render('inicio', null);
 // });
-
-app.get('/home-admin', function(req, res)
-{
-    console.log("Soy un pedido GET", req.query);
-    res.render('home-admin', null);
-});
 
 // app.post('/home', function(req, res)
 // {
@@ -187,13 +172,6 @@ app.post('/modificarUsuario', async function(req, res)
     let respuesta = await MySQL.realizarQuery(`UPDATE Usuarios SET usuario_nombre = "${req.body.usuario_nombre}", usuario_apellido = "${req.body.usuario_apellido}",  usuario_DNI = "${req.body.usuario_DNI}", usuario_nombreDeUsuario = "${req.body.usuario_nombreDeUsuario}", usuario_contraseña = "${req.body.usuario_contraseña}" WHERE id_usuario = ${req.body.id_usuario}`)
     res.send({usuarioMod: respuesta})
 });
-
-app.post('/ranking', async function(req, res){
-    console.log("Pedido post /tablaRanking :)")
-    // let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
-    // console.log(usuario_puntaje)
-    res.render('ranking', null/*{puntaje: usuario_puntaje}*/);
-})
 
 // app.get('/tablaRanking', async function(req, res){
 //     console.log("Pedido get /tablaRanking :)")
@@ -254,3 +232,154 @@ app.post('/ranking', async function(req, res){
 //     console.log("Soy un pedido DELETE", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método DELETE
 //     res.send(null);
 // });
+
+
+// LOGIN Y REGISTRO CON FIREBASE
+const { initializeApp } = require("firebase/app");
+const {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendEmailVerification,
+    signOut,
+    GoogleAuthProvider,
+  } = require("firebase/auth");
+  
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.static("public"));
+  
+  
+  app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+  app.set("view engine", "handlebars");
+  
+  app.listen(Listen_Port, function () {
+    console.log(
+      "Servidor NodeJS corriendo en http://localhost:" + Listen_Port + "/"
+    );
+  });
+  
+  // Configuración de Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyAS3wNtKMqea0Qqo8SLf2snnsX2DduDLf4",
+    authDomain: "proyecto-final-54cc3.firebaseapp.com",
+    projectId: "proyecto-final-54cc3",
+    storageBucket: "proyecto-final-54cc3.appspot.com",
+    messagingSenderId: "318273645668",
+    appId: "1:318273645668:web:306619f4fdb5277da60371",
+    measurementId: "G-KMLSCJQDLK"
+  };
+  
+  const appFirebase = initializeApp(firebaseConfig);
+  const auth = getAuth(appFirebase);
+  
+  // Importar AuthService
+  const authService = require("./authService");
+  
+  app.get("/", (req, res) => {
+    res.render("home");
+  });
+  
+  app.get("/register", (req, res) => {
+    res.render("register");
+  });
+  
+  app.post("/register", async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      await authService.registerUser(auth, { email, password });
+      res.render("register", {
+        message: "Registro exitoso. Puedes iniciar sesión ahora.",
+      });
+    } catch (error) {
+      console.error("Error en el registro:", error);
+      res.render("register", {
+        message: "Error en el registro: " + error.message,
+      });
+    }
+  });
+  
+  app.get("/login", (req, res) => {
+    res.render("login");
+  });
+  
+  app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const userCredential = await authService.loginUser(auth, {
+        email,
+        password,
+      });
+      // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
+      res.redirect("/dashboard");
+    } catch (error) {
+      console.error("Error en el inicio de sesión:", error);
+      res.render("login", {
+        message: "Error en el inicio de sesión: " + error.message,
+      });
+    }
+  });
+  
+  app.get("/dashboard", (req, res) => {
+    // Agrega aquí la lógica para mostrar la página del dashboard
+    res.render("dashboard");
+  });
+  
+  /************************************** */
+  
+
+  // JUEGO
+
+  app.get('/tetris', function(req, res)
+{
+    console.log(req.query);
+    res.render('tetris', null);
+});
+
+app.get('/gameOver', function(req, res)
+{
+    console.log("Soy un pedido GET /gameOver", req.query);
+    res.render('gameOver', null);
+});
+
+
+app.get('/registro', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('registro', null);
+});
+
+app.get('/login', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('login', null);
+});
+
+app.get('/admin', async function(req, res)
+{
+    console.log("Soy un pedido GET /iraadmin", req.query);
+    // let preguntas = await MySQL.realizarQuery("SELECT id_pregunta FROM Preguntas;");
+    //console.log(preguntas)
+    // console.log(preguntas[1].id_pregunta)
+    res.render('administrador', null/*{preguntas: preguntas}*/);
+});
+
+app.get('/logout', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('inicio', null);
+});
+
+app.get('/ranking', async function(req, res){
+    console.log("Pedido post /tablaRanking :)")
+    // let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
+    // console.log(usuario_puntaje)
+    res.render('ranking', null/*{puntaje: usuario_puntaje}*/);
+})
+
+app.get('/home-admin', function(req, res)
+{
+    console.log("Soy un pedido GET", req.query);
+    res.render('home-admin', null);
+});
