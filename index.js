@@ -344,10 +344,10 @@ app.get('/gameOver', function(req, res)
 });
 
 
-app.get('/registro', function(req, res)
+app.get('/register', function(req, res)
 {
     console.log("Soy un pedido GET", req.query);
-    res.render('registro', null);
+    res.render('register', null);
 });
 
 app.get('/login', function(req, res)
