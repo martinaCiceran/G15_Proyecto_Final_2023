@@ -7,57 +7,41 @@
 </head>
 <body>
     <section class="section-login-registro">
-        <form action="/editarPreguntas" method="post"></form>
-            <div class="mb-3 form-group">
-                <h2><strong>EDITAR</strong></h2>
-            </div>
+        <form action="/leerUsuarios" method="post"></form>
+        <form action="/modificarUsuario" method="post"></form>
 
-            <div class="mb-3 form-group">
-                <label for="id_pregunta" class="form-label">Id pregunta</label>
-                <select id="selectPreguntas" onchange="editarPreguntas()">
-                    {{#each preguntas}}
-                        <option value="{{this.id_pregunta}}">{{this.id_pregunta}}</option>
-                    {{/each}}
-                </select>
-            </div>
-            
-            <div class="mb-3 form-group">
-                <label for="agregarPregunta" class="form-label">Agregar Pregunta</label>
-                <input type="text" class="form-control" id="pregunta" name="pregunta" value="" placeholder="Agregar Pregunta">
-            </div>
-            <div class="mb-3 form-group">
-                <label for="op_1" class="form-label">Opcion 1</label>
-                <input type="text" class="form-control" id="op_1" name="op_1" value="" placeholder="Opcion 1">
-            </div>
-            <div class="mb-3 form-group">
-                <label for="op_2" class="form-label">Opcion 2</label>
-                <input type="text" class="form-control" id="op_2" name="op_2" value="" placeholder="Opcion 2">
-            </div>
-            <div class="mb-3 form-group">
-                <label for="op_3" class="form-label">Opcion 3</label>
-                <input type="text" class="form-control" id="op_3" name="op_3" value="" placeholder="Opcion 3">
-            </div>
-            <div class="mb-3 form-group">
-                <label for="op_correcta" class="form-label">Opcion correcta</label>
-                <input type="text" class="form-control" id="op_correcta" name="op_correcta" value="" placeholder="Opción correcta">
-            </div>
-            <div class="form-login-registro">
-                <input type="submit" class="botones" value="Agregar Pregunta">
-            </div>
-        </form>
-        <form action="/" method="post">
-            <div class="mb-3 form-group">
-                <label for="id_pregunta" class="form-label">Id pregunta</label>
-                <input type="text" class="form-control" id="id_pregunta" name="id_pregunta" value="" placeholder="Id pregunta">
-            </div>
-            <div class="mb-3 form-check">
-                <button onclick="modificarPregunta()" class="botones">Modificar</button>
-            </div>
-        </form>
+        <div class="mb-3 form-group">
+            <h2><strong>EDITAR</strong></h2>
+        </div>
 
-        
+        <div class="mb-3 form-group">
+            <label for="id_usuario" class="form-label">Elegir usuario</label>
+            <select id="selectUsuarios" onchange="leerUsuarios()">
+                {{#each usuarios}}
+                    <option value="{{this.id_usuarios}}">{{this.id_usuarios}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="mb-3 form-group">
+            <label for="nombreDeUsuario" class="form-label">Usuario</label>
+            <input type="text" class="form-control" id="usuario" name="usuario" value="" placeholder="Usuario">
+        </div>
+        <div class="mb-3 form-group">
+            <label for="id_usuario" class="form-label">Es administrador</label>
+            <select id="esAdmin" onchange="leerUsuarios()">
+                <option value="Si">Si</option> 
+                <option value="No">No</option>
+                <!-- PREGUNTAR TRUE Y FALSE-->
+            </select>
+        </div>
+        <div class="form-login-registro">
+            <input type="submit" class="botones" onclick="agregarUsuarios()" value="Agregar Usuario"> 
+        </div>
         <div class="mb-3 form-check">
-            <button onclick="eliminarPregunta()" class="botones">Eliminar</button>
+            <input type="submit" onclick="modificarUsuarios()" class="botones" value="Modificar"> 
+        </div>
+        <div class="mb-3 form-check">
+            <input type="submit" onclick="eliminarUsuarios()" class="botones" value="Eliminar" style="background-color: rgb(226, 80, 80);"> 
         </div>
     </section>
 </body>
