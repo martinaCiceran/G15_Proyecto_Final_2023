@@ -16,6 +16,7 @@ const MySQL = require('./modulos/mysql'); //Añado el archivo mysql.js presente 
 const session = require('express-session'); // Para usar variables de sesion
 const app = express(); //Inicializo express para el manejo de las peticiones
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public')); //Expongo al lado cliente la carpeta "public"
 
 app.use(bodyParser.urlencoded({ extended: false })); //Inicializo el parser JSON
@@ -26,6 +27,20 @@ app.set('view engine', 'handlebars'); //Inicializo Handlebars
 
 const Listen_Port = 3000; //Puerto por el que estoy ejecutando la página Web
 
+const server=app.listen(Listen_Port, function() {
+  console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
+});
+
+
+const io= require('socket.io')(server);
+
+const sessionMiddleware=session({
+    secret: 'sararasthastka',
+    resave: true,
+    saveUninitialized: false,
+});
+
+io.engine.use(sessionMiddleware);
 
 app.use(session({secret: '123456', resave: true, saveUninitialized: true}));
 
@@ -203,18 +218,12 @@ const {
     GoogleAuthProvider,
   } = require("firebase/auth");
   
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+
 
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-app.listen(Listen_Port, function () {
-  console.log(
-    "Servidor NodeJS corriendo en http://localhost:" + Listen_Port + "/"
-  );
-});
   
 // Configuración de Firebase
 const firebaseConfig = {
@@ -333,3 +342,63 @@ app.get("/dashboard", (req, res) => {
 //     console.log("Soy un pedido DELETE", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método DELETE
 //     res.send(null);
 // });
+/*
+io.on("connection", (socket) => {
+  //Esta línea es para compatibilizar con lo que venimos escribiendo
+  const req = socket.request;*/
+
+  //Esto serìa el equivalente a un app.post, app.get...
+  // SE CONECTA A LA SALA
+  /* socket.on('incoming-message', data => {
+      console.log("INCOMING MESSAGE:", data);
+      console.log("SALA: ", req.session.salaNombre)
+      io.to(req.session.salaNombre).emit("server-message", {mensaje:"MENSAJE DE SERVIDOR"}) 
+  });
+  */
+/*  
+  socket.on('nombreSala', async (data) => {
+    console.log("Se conecto a la sala:", data.salaNombre);
+    if(req.session.salaNombre != ""){
+        socket.leave(req.session.salaNombre)
+    }
+    socket.join(data.salaNombre)
+    req.session.salaNombre = data.salaNombre
+    io.to(data.salaNombre).emit("server-message", {mensaje:"te conectaste a..."}) //remplezar por dom, imnput del ftron
+    req.session.save();
+
+    let mensajes = await MySQL.realizarQuery(`SELECT mensaje, usuario, idChat, Mensajes.idContacto FROM Mensajes INNER JOIN Contactos ON Mensajes.idContacto = Contactos.idContacto WHERE Mensajes.idChat = ${req.session.salaNombre};`)
+    for (let i = 0; i < mensajes.length; i++) {
+      if (mensajes[i].idContacto == req.session.usuario[0].idContacto) {
+          mensajes[i].idContacto = 1
+      } else {
+          mensajes[i].idContacto = 0
+      }
+    }
+    console.log(mensajes)
+    io.to(data.salaNombre).emit("mensajes", {mensajes:mensajes})
+
+  });
+ 
+  socket.on('nuevoMensaje', async data => {
+    console.log("Mensaje del input: ", data.mensaje, "sala:", req.session.salaNombre);
+    io.to(req.session.salaNombre).emit("server-message", { mensaje: data.mensaje });
+    await MySQL.realizarQuery(`INSERT INTO Mensajes(idChat, idContacto, fecha, mensaje) VALUES(${req.session.salaNombre}, ${req.session.usuario[0].idContacto}, NOW(), "${data.mensaje}") `)
+
+    let nombreP = await MySQL.realizarQuery(`SELECT usuario FROM Contactos WHERE idContacto = ${req.session.usuario[0].idContacto};`)
+
+    let mensajes = await MySQL.realizarQuery(`SELECT mensaje, usuario, idChat, Mensajes.idContacto FROM Mensajes INNER JOIN Contactos ON Mensajes.idContacto = Contactos.idContacto WHERE Mensajes.idChat = ${req.session.salaNombre} ORDER BY idMensaje DESC LIMIT 1;`)
+
+
+    if (mensajes.idContacto == req.session.usuario[0].idContacto) {
+      mensajes.idContacto = 1
+    } else {
+      mensajes.idContacto = 0
+    }
+      
+    io.to(req.session.salaNombre).emit("nuevo-mensaje", {mensaje: data.mensaje, nombreP:nombreP, idContacto: req.session.usuario[0].idContacto}) // aca lo que sucede es que mandamos el mensaje con el id al front :)
+
+  });
+
+  
+});*/
+//setInterval(() => io.emit("server-message", {mensaje:"MENSAJE DEL SERVIDOR"}), 2000);

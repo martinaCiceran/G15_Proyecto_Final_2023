@@ -51,7 +51,7 @@ const COLORES = [
 
 const FILAS = 20;
 const COLUMNAS = 10;
-let puntaje = 0;
+var puntaje = 0;
 
 let canvas = document.getElementById("tetris"); // agarra el primer elemento con id tetris
 let tablaPuntaje = document.querySelector('h2')
