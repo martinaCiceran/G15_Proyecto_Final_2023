@@ -14,22 +14,52 @@ const exphbs  = require('express-handlebars'); //Para el manejo de los HTML
 const bodyParser = require('body-parser'); //Para el manejo de los strings JSON
 const MySQL = require('./modulos/mysql'); //Añado el archivo mysql.js presente en la carpeta módulos
 const session = require('express-session'); // Para usar variables de sesion
+const { initializeApp } = require("firebase/app");
+const {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendEmailVerification,
+    signOut,
+    GoogleAuthProvider,
+} = require("firebase/auth");
+
 const app = express(); //Inicializo express para el manejo de las peticiones
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public')); //Expongo al lado cliente la carpeta "public"
+app.engine('handlebars', exphbs({defaultLayout: 'main'})); //Inicializo Handlebars. Utilizo como base el layout "Main".
+app.set("view engine", "handlebars");
+const Listen_Port = 3000; //Puerto por el que estoy ejecutando la página Web
+const server=app.listen(Listen_Port, function() {
+  console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
+});
+
+// Configuración de Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAS3wNtKMqea0Qqo8SLf2snnsX2DduDLf4",
+  authDomain: "proyecto-final-54cc3.firebaseapp.com",
+  projectId: "proyecto-final-54cc3",
+  storageBucket: "proyecto-final-54cc3.appspot.com",
+  messagingSenderId: "318273645668",
+  appId: "1:318273645668:web:306619f4fdb5277da60371",
+  measurementId: "G-KMLSCJQDLK"
+};
+
+const appFirebase = initializeApp(firebaseConfig);
+const auth = getAuth(appFirebase);
+
+// Importar AuthService
+const authService = require("./authService");
 
 app.use(bodyParser.urlencoded({ extended: false })); //Inicializo el parser JSON
 app.use(bodyParser.json());
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'})); //Inicializo Handlebars. Utilizo como base el layout "Main".
+
 app.set('view engine', 'handlebars'); //Inicializo Handlebars
 
-const Listen_Port = 3000; //Puerto por el que estoy ejecutando la página Web
 
-const server=app.listen(Listen_Port, function() {
-  console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
-});
+
 
 
 const io= require('socket.io')(server);
@@ -128,14 +158,6 @@ app.get('/admin', async function(req, res)
     res.render('administrador', {usuarios: usuarios});
 });
 
-app.post('/login', async function(req, res)
-{
-    //Petición POST con URL = "/login"
-    console.log("Soy un pedido POST /login", req.body);
-    let respuesta = await MySQL.realizarQuery(`SELECT * FROM Usuarios WHERE usuario = "${req.body.usuario}" AND password = "${req.body.contraseña}"`)
-    req.session.user = req.body.usuario
-});
-
 // app.post('/leerPreguntas', async function(req, res)
 // {
 //     console.log("Soy un pedido POST", req.body);
@@ -208,40 +230,6 @@ app.post('/modificarUsuario', async function(req, res)
 });
 
 // LOGIN Y REGISTRO CON FIREBASE
-const { initializeApp } = require("firebase/app");
-const {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    sendEmailVerification,
-    signOut,
-    GoogleAuthProvider,
-  } = require("firebase/auth");
-  
-
-
-
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
-
-  
-// Configuración de Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyAS3wNtKMqea0Qqo8SLf2snnsX2DduDLf4",
-  authDomain: "proyecto-final-54cc3.firebaseapp.com",
-  projectId: "proyecto-final-54cc3",
-  storageBucket: "proyecto-final-54cc3.appspot.com",
-  messagingSenderId: "318273645668",
-  appId: "1:318273645668:web:306619f4fdb5277da60371",
-  measurementId: "G-KMLSCJQDLK"
-};
-
-const appFirebase = initializeApp(firebaseConfig);
-const auth = getAuth(appFirebase);
-
-// Importar AuthService
-const authService = require("./authService");
-
   
 app.post("/register", async (req, res) => {
   const { email, password } = req.body;
@@ -251,6 +239,8 @@ app.post("/register", async (req, res) => {
     res.render("register", {
       message: "Registro exitoso. Puedes iniciar sesión ahora.",
     });
+    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(email) VALUES("${req.body.email}")`)
+    console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios_tetris')))
   } catch (error) {
     console.error("Error en el registro:", error);
     res.render("register", {
@@ -267,6 +257,11 @@ app.post("/login", async (req, res) => {
       email,
       password,
     });
+    let userLoggeado = userCredential.user.uid
+    await MySQL.realizarQuery(`UPDATE Usuarios_tetris SET idUsuario = ${userLoggeado} WHERE email = ${req.body.email}`)
+    console.log(userCredential)
+    console.log(userCredential.user.uid)
+
     // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
     res.redirect("/option");
   } catch (error) {
@@ -275,11 +270,6 @@ app.post("/login", async (req, res) => {
       message: "Error en el inicio de sesión: " + error.message,
     });
   }
-});
-  
-app.get("/dashboard", (req, res) => {
-  // Agrega aquí la lógica para mostrar la página del dashboard
-  res.render("dashboard");
 });
   
 
