@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<body id="bodyy">
+<body id="bodyy" style="background-image: url(img/fondoso.png);">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,20 +8,17 @@
 </head>
 <body>
     <br>
-    <video src="img/luz.gif" autopLay Loop></video>
     <section class="section-login-registro"> 
-            <div id="boxblanco">
+            <div class="mb-3 form-group"  id="boxblanco">
         <form action="/login" method="POST">
             <br>
             <br>  
             <img src="img/login.png">
             <br>
             <br>
-                    
-            <div class="mb-3 form-group" >
                 
-                <input type="text" class="form-control" id="violeta" name="usuario" value="" placeholder="Usuario" style="  width: 530px; text-align: center;">
-            </div>
+                <input type="text" class="form-control" id="violeta" name="usuario" value="" placeholder="Usuario"  style="  width: 418px; text-align: center;">
+            
             <div class="mb-3 form-group" style="  width: 530px; text-align: center;">
                 
                 <input type="password" class="form-control" id="violeta" name="contraseña" placeholder="Contraseña">
@@ -38,6 +35,7 @@
         </form>
         <form action="/home" method="POST" id="form-login"></form>
         <form action="/inicio-admin" method="GET" id="form-admin"></form>
+        </div>
         </div>
     </section>
 

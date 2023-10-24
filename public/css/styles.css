@@ -111,9 +111,10 @@ flex-direction: row;
     margin: 20px;
     padding: 10px 30px;
     text-align: center;
+    display: flex;
     text-decoration: none;
     outline: none;
-    color: #603cbb;
+    color: #de63af;
     background-color: #342162 ;
     border-color:  #000000;
     border-radius: 50px;
@@ -163,7 +164,7 @@ flex-direction: row;
 background-color: #342162 ;
 color:#6f58a5  ;
 }
-.bodyyy{
+.fondoo{
     background-image: url("/public/img/tetris3.png");
   }
 
