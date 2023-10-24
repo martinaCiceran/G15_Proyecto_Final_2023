@@ -236,11 +236,18 @@ app.post("/register", async (req, res) => {
 
   try {
     await authService.registerUser(auth, { email, password });
+
+    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris( email, es_admin) VALUES( "${req.body.email}", 0)`)
+    // let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
+
+    // req.session.userLoggeado = userLoggeado[0]
+
+    // console.log(req.session.userLoggeado)
+
     res.render("register", {
       message: "Registro exitoso. Puedes iniciar sesión ahora.",
     });
-    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(email) VALUES("${req.body.email}")`)
-    console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios_tetris')))
+    
   } catch (error) {
     console.error("Error en el registro:", error);
     res.render("register", {
@@ -257,11 +264,12 @@ app.post("/login", async (req, res) => {
       email,
       password,
     });
-    let userLoggeado = userCredential.user.uid
-    await MySQL.realizarQuery(`UPDATE Usuarios_tetris SET idUsuario = ${userLoggeado} WHERE email = ${req.body.email}`)
-    console.log(userCredential)
+    //console.log(userCredential)
     console.log(userCredential.user.uid)
-
+    await MySQL.realizarQuery(`UPDATE Usuarios_tetris SET idUsuario = "${userCredential.user.uid}" WHERE email = "${req.body.email}"`)
+    let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
+    req.session.userLoggeado = userLoggeado[0]
+    console.log(req.session.userLoggeado)
     // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
     res.redirect("/option");
   } catch (error) {
