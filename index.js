@@ -97,6 +97,7 @@ app.get('/', function(req, res)
 app.get('/tetris', function(req, res)
 {
   console.log(req.query);
+  console.log("Soy un pedido GET /TETRIS", req.query);
   res.render('tetris', null);
 });
 
@@ -109,8 +110,8 @@ app.get('/gameOver', function(req, res)
 app.post('/sumarPuntaje', async function(req, res)
 {
     console.log("Soy un pedido POST /sumarPuntaje", req.body);
-    let respuesta = await MySQL.realizarQuery(`Update Puntaje_tetris(puntaje) SET("${req.body.puntaje}" WHERE usuario == ${req.session.user})`)
-    console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje')))
+    let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris(puntaje) SET("${req.body.puntaje}" WHERE usuario == ${req.session.user})`)
+    console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje_tetris')))
     res.send({puntaje: respuesta})
 });
 

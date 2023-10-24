@@ -67,6 +67,7 @@ function openPopUp(){
 }
 
 
+
 function jugar(){
 
     let piezaObj = null;
@@ -125,12 +126,16 @@ function jugar(){
         } // si borraste 1, sumas 10p, si borraste 2, sumas 30p y asi.
         if(contador == 1){
             puntaje+=10;
+            puntaje()
         } else if(contador == 2){
             puntaje+=30;
+            puntaje()
         }else if(contador == 3){
             puntaje+=50;
+            puntaje()
         }else if(contador > 3){
             puntaje+=100;
+            puntaje()
         }
  
         tablaPuntaje.innerHTML = 'Puntaje: ' + puntaje;
@@ -271,6 +276,41 @@ function jugar(){
         }
     })
 
+    async function fetchPuntaje(data){
+        //putJSON() es solo el nombre de esta funcion que lo pueden cambiar    
+      
+        try {
+          const response = await fetch("/sumarPuntaje", {
+            method: "POST", 
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+            
+          //En result obtengo la respuesta
+          const result = await response.json();
+          console.log("Success:", result);
+          console.log("genial martu :)")
+      
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      } 
+    
+    function puntaje() {
+        //Leo los datos del input
+        let puntaje = document.getElementById("puntaje").value
+      
+        //Creo un objeto de forma instantanea
+        let data = {
+          puntaje: puntaje
+        }
+      
+        //data es el objeto que le paso al back
+        fetchPuntaje(data)
+    }
+
 }
 
 let jugarBtn = document.getElementById('jugar-btn')
@@ -279,3 +319,4 @@ function closePopUp(){
     jugarBtn.classList.add('close-jugar-btn')
     jugar()
 }
+
