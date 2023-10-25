@@ -37,3 +37,10 @@ socket.on("nuevo-mensaje", data => {
     
     // document.getElementById("message-input").value = "";
 })
+
+// function uniseSala(){
+//     cuadricula = document.getElementById("tetris")
+//     console.log("Enviendo cuadricula al back")
+//     console.log(cuadricula)
+//     socket.emit("mostrarCuadricula", {cuadricula: cuadricula})
+// }

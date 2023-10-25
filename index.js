@@ -378,6 +378,19 @@ io.on("connection", (socket) => {
     // io.to(data.salaNombre).emit("mensajes", {mensajes:mensajes})
 
   });
+
+
+  socket.on('mostrarCuadricula', async (data) => {
+    console.log("Se conecto a la sala:", data.cuadricula);
+    req.session.cuadricula = data.cuadricula
+    if(req.session.salaNombre != ""){
+      socket.leave(req.session.cuadricula)
+    }
+    socket.join(data.salaNombre)
+    io.to(data.cuadricula).emit("server-message", {mensaje:"ENVIANDO CUADRICULA", cuadricula: data.cuadricula}) //remplezar por dom, imnput del ftron
+    req.session.save();
+
+  });
  
   // socket.on('nuevoMensaje', async data => {
   //   console.log("Mensaje del input: ", data.mensaje, "sala:", req.session.salaNombre);

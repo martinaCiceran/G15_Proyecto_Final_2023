@@ -67,14 +67,13 @@ function openPopUp(){
 }
 
 
-
 function jugar(){
 
     let piezaObj = null;
     let cuadricula = generarCuadricula()
     console.log(cuadricula);
     // console.log(piezaObj)
-
+    enviarCuadricula(cuadricula)
 
     function generarPiezaRandom(){
         let ran = Math.floor(Math.random() * 7) // devuelve un numero random del 0 al 7 --> Math.floor() devuelve un numero sin coma
@@ -137,6 +136,8 @@ function jugar(){
             puntaje+=100;
             puntaje()
         }
+
+        enviarCuadricula(cuadricula)
  
         tablaPuntaje.innerHTML = 'Puntaje: ' + puntaje;
 
@@ -276,6 +277,13 @@ function jugar(){
         }
     })
 
+    function enviarCuadricula(cuadricula){
+        //cuadricula = document.getElementById("tetris")
+        console.log("Enviendo cuadricula al back")
+        console.log(cuadricula)
+        socket.emit("mostrarCuadricula", {cuadricula: cuadricula})
+    }
+    
 }
 
 let jugarBtn = document.getElementById('jugar-btn')
@@ -284,4 +292,5 @@ function closePopUp(){
     jugarBtn.classList.add('close-jugar-btn')
     jugar()
 }
+
 
