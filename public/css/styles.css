@@ -176,3 +176,18 @@ color:#6f58a5  ;
 .form-inicio {
     margin: auto;
 }
+
+#www{
+    position: fixed;
+    bottom: 20px; /* Ajusta este valor según sea necesario */
+    right: 20px;
+    margin: 20px;
+padding: 10px 40px;
+text-align: center;
+text-decoration: none;
+outline: none;
+color: #000000;
+background-color: #CAD8D6 ;
+border-color:  #000000;
+border-radius: 50px; /* Ajusta este valor según sea necesario */
+}
