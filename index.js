@@ -109,10 +109,10 @@ app.get('/gameOver', function(req, res)
 
 app.post('/sumarPuntaje', async function(req, res)
 {
-    console.log("Soy un pedido POST /sumarPuntaje", req.body);
-    let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris(puntaje) SET("${req.body.puntaje}" WHERE usuario == ${req.session.user})`)
-    console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje_tetris')))
-    res.send({puntaje: respuesta})
+  console.log("Soy un pedido POST /sumarPuntaje", req.body);
+  let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris(puntaje) SET("${req.body.puntaje}" WHERE usuario == ${req.session.user})`)
+  console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje_tetris')))
+  res.send({puntaje: respuesta})
 });
 
 app.get('/login', function(req, res)
@@ -150,6 +150,7 @@ app.get('/ranking', async function(req, res){
   // console.log(usuario_puntaje)
   res.render('ranking', null/*{puntaje: usuario_puntaje}*/);
 })
+
 app.get('/admin', async function(req, res)
 {
     console.log("Soy un pedido GET /iraadmin", req.query);
@@ -246,7 +247,7 @@ app.post("/register", async (req, res) => {
     // console.log(req.session.userLoggeado)
 
     res.render("register", {
-      message: "Registro exitoso. Puedes iniciar sesión ahora.",
+      message: "Registro exitoso. Puedes iniciar sesión ahora. VERIFICA TU CASILLA DE MAIL ",
     });
     
   } catch (error) {
@@ -268,6 +269,7 @@ app.post("/login", async (req, res) => {
     //console.log(userCredential)
     console.log(userCredential.user.uid)
     await MySQL.realizarQuery(`UPDATE Usuarios_tetris SET idUsuario = "${userCredential.user.uid}" WHERE email = "${req.body.email}"`)
+    //await MySQL.realizarQuery(`INSERT INTO Puntaje_tetris SET usuario = "${userCredential.user.uid}"`)
     let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
     req.session.userLoggeado = userLoggeado[0]
     console.log(req.session.userLoggeado)

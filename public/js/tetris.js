@@ -125,16 +125,12 @@ function jugar(){
         } // si borraste 1, sumas 10p, si borraste 2, sumas 30p y asi.
         if(contador == 1){
             puntaje+=10;
-            puntaje()
         } else if(contador == 2){
             puntaje+=30;
-            puntaje()
         }else if(contador == 3){
             puntaje+=50;
-            puntaje()
         }else if(contador > 3){
             puntaje+=100;
-            puntaje()
         }
 
         enviarCuadricula(cuadricula)
@@ -283,6 +279,8 @@ function jugar(){
         console.log(cuadricula)
         socket.emit("mostrarCuadricula", {cuadricula: cuadricula})
     }
+
+
     
 }
 
