@@ -1,5 +1,5 @@
 
-<form action="/option" method="post">
+{{!-- <form action="/option" method="post"> --}}
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <body>
         <div class="contenedor">
             <div class="multijugador">
-                <button type="submit">Multijugador</button>
+                <button type="submit" id="multijugador" onclick="uniseSala()">Multijugador</button>
             </div>
             <form action="/tetris" method="GET" class="container-sm">
                 <div class="mb-3 form-check">
@@ -18,6 +18,6 @@
 
         </div>
 
-</form>
+{{!-- </form> --}}
 
     

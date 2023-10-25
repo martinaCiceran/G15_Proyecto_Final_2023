@@ -341,20 +341,21 @@ app.post("/login", async (req, res) => {
 //     console.log("Soy un pedido DELETE", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método DELETE
 //     res.send(null);
 // });
-/*
+
+
+
 io.on("connection", (socket) => {
   //Esta línea es para compatibilizar con lo que venimos escribiendo
-  const req = socket.request;*/
+  const req = socket.request;
 
   //Esto serìa el equivalente a un app.post, app.get...
   // SE CONECTA A LA SALA
-  /* socket.on('incoming-message', data => {
-      console.log("INCOMING MESSAGE:", data);
-      console.log("SALA: ", req.session.salaNombre)
-      io.to(req.session.salaNombre).emit("server-message", {mensaje:"MENSAJE DE SERVIDOR"}) 
-  });
-  */
-/*  
+  // socket.on('incoming-message', data => {
+  //     console.log("INCOMING MESSAGE:", data);
+  //     req.session.salaNombre = data.salaNombre
+  //     console.log("SALA: ", req.session.salaNombre)
+  //     io.to(req.session.salaNombre).emit("server-message", {mensaje:"MENSAJE DE SERVIDOR"}) 
+  // });
   socket.on('nombreSala', async (data) => {
     console.log("Se conecto a la sala:", data.salaNombre);
     if(req.session.salaNombre != ""){
@@ -365,39 +366,39 @@ io.on("connection", (socket) => {
     io.to(data.salaNombre).emit("server-message", {mensaje:"te conectaste a..."}) //remplezar por dom, imnput del ftron
     req.session.save();
 
-    let mensajes = await MySQL.realizarQuery(`SELECT mensaje, usuario, idChat, Mensajes.idContacto FROM Mensajes INNER JOIN Contactos ON Mensajes.idContacto = Contactos.idContacto WHERE Mensajes.idChat = ${req.session.salaNombre};`)
-    for (let i = 0; i < mensajes.length; i++) {
-      if (mensajes[i].idContacto == req.session.usuario[0].idContacto) {
-          mensajes[i].idContacto = 1
-      } else {
-          mensajes[i].idContacto = 0
-      }
-    }
-    console.log(mensajes)
-    io.to(data.salaNombre).emit("mensajes", {mensajes:mensajes})
+    // let mensajes = await MySQL.realizarQuery(`SELECT mensaje, usuario, idChat, Mensajes.idContacto FROM Mensajes INNER JOIN Contactos ON Mensajes.idContacto = Contactos.idContacto WHERE Mensajes.idChat = ${req.session.salaNombre};`)
+    // for (let i = 0; i < mensajes.length; i++) {
+    //   if (mensajes[i].idContacto == req.session.usuario[0].idContacto) {
+    //       mensajes[i].idContacto = 1
+    //   } else {
+    //       mensajes[i].idContacto = 0
+    //   }
+    // }
+    // console.log(mensajes)
+    // io.to(data.salaNombre).emit("mensajes", {mensajes:mensajes})
 
   });
  
-  socket.on('nuevoMensaje', async data => {
-    console.log("Mensaje del input: ", data.mensaje, "sala:", req.session.salaNombre);
-    io.to(req.session.salaNombre).emit("server-message", { mensaje: data.mensaje });
-    await MySQL.realizarQuery(`INSERT INTO Mensajes(idChat, idContacto, fecha, mensaje) VALUES(${req.session.salaNombre}, ${req.session.usuario[0].idContacto}, NOW(), "${data.mensaje}") `)
+  // socket.on('nuevoMensaje', async data => {
+  //   console.log("Mensaje del input: ", data.mensaje, "sala:", req.session.salaNombre);
+  //   io.to(req.session.salaNombre).emit("server-message", { mensaje: data.mensaje });
+  //   await MySQL.realizarQuery(`INSERT INTO Mensajes(idChat, idContacto, fecha, mensaje) VALUES(${req.session.salaNombre}, ${req.session.usuario[0].idContacto}, NOW(), "${data.mensaje}") `)
 
-    let nombreP = await MySQL.realizarQuery(`SELECT usuario FROM Contactos WHERE idContacto = ${req.session.usuario[0].idContacto};`)
+  //   let nombreP = await MySQL.realizarQuery(`SELECT usuario FROM Contactos WHERE idContacto = ${req.session.usuario[0].idContacto};`)
 
-    let mensajes = await MySQL.realizarQuery(`SELECT mensaje, usuario, idChat, Mensajes.idContacto FROM Mensajes INNER JOIN Contactos ON Mensajes.idContacto = Contactos.idContacto WHERE Mensajes.idChat = ${req.session.salaNombre} ORDER BY idMensaje DESC LIMIT 1;`)
+  //   let mensajes = await MySQL.realizarQuery(`SELECT mensaje, usuario, idChat, Mensajes.idContacto FROM Mensajes INNER JOIN Contactos ON Mensajes.idContacto = Contactos.idContacto WHERE Mensajes.idChat = ${req.session.salaNombre} ORDER BY idMensaje DESC LIMIT 1;`)
 
 
-    if (mensajes.idContacto == req.session.usuario[0].idContacto) {
-      mensajes.idContacto = 1
-    } else {
-      mensajes.idContacto = 0
-    }
+  //   if (mensajes.idContacto == req.session.usuario[0].idContacto) {
+  //     mensajes.idContacto = 1
+  //   } else {
+  //     mensajes.idContacto = 0
+  //   }
       
-    io.to(req.session.salaNombre).emit("nuevo-mensaje", {mensaje: data.mensaje, nombreP:nombreP, idContacto: req.session.usuario[0].idContacto}) // aca lo que sucede es que mandamos el mensaje con el id al front :)
+  //   io.to(req.session.salaNombre).emit("nuevo-mensaje", {mensaje: data.mensaje, nombreP:nombreP, idContacto: req.session.usuario[0].idContacto}) // aca lo que sucede es que mandamos el mensaje con el id al front :)
 
-  });
+  // });
 
   
-});*/
+});
 //setInterval(() => io.emit("server-message", {mensaje:"MENSAJE DEL SERVIDOR"}), 2000);
