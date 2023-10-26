@@ -144,9 +144,9 @@ flex-direction: row;
 
 #horizontal{
     display: flex;
-    flex-direction: row;
-    margin: 100px;
-    align-self: center;
+    justify-content: center;
+    margin: 0 300px;
+    
   
 }
 #gris1 {
@@ -163,7 +163,9 @@ flex-direction: row;
   
 #gris1:hover {
 background-color: #342162 ;
-color:#6f58a5  ;
+color:#eb2ad1  ;
+border-color: #ddd;
+border-radius: 50px;
 }
 .fondoo{
     background-image: url("/public/img/tetris3.png");
@@ -190,4 +192,11 @@ color: #000000;
 background-color: #CAD8D6 ;
 border-color:  #000000;
 border-radius: 50px; /* Ajusta este valor según sea necesario */
+}
+
+
+#contenedor{
+    display: flex; /* Establece el contenedor como flexbox */
+    justify-content: center; /* Centra horizontalmente el contenido */
+    align-items: center; /* Centra verticalmente el contenido */
 }
