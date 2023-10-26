@@ -20,9 +20,8 @@ async function fetchPuntaje(data){
   }
 } 
 
-function puntaje() {
+function puntaje(puntaje) {
   //Leo los datos del input
-  let puntaje = document.getElementById("puntaje").value
 
   //Creo un objeto de forma instantanea
   let data = {

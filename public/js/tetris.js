@@ -167,9 +167,10 @@ function jugar(){
             }
             if(piezaObj.y == 0){
                 alert("Game Over")
+                puntaje(puntaje)
+                console.log("perdiste hermanoi")
                 cuadricula = generarCuadricula()
                 puntaje = 0
-
                 // ACA TE TIENE QUE LLEVAR A LA PAGINA DE GAME OVER
             }
             piezaObj = null;

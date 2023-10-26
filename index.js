@@ -110,9 +110,20 @@ app.get('/gameOver', function(req, res)
 app.post('/sumarPuntaje', async function(req, res)
 {
   console.log("Soy un pedido POST /sumarPuntaje", req.body);
-  let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris(puntaje) SET("${req.body.puntaje}" WHERE usuario == ${req.session.user})`)
+  let usuariosPuntaje =  await MySQL.realizarQuery(`SELECT idUsuario FROM Puntaje_tetris`)
+  for(let i= 0; i<usuariosPuntaje.length; i++) {
+    if(usuariosPuntaje[i] == req.session.userLoggeado){
+      let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris SET puntaje = puntaje + ${req.body.puntaje} WHERE idUsuario = ${req.session.userLoggeado})`)
+      res.send({validar: true, puntaje: respuesta})
+    }
+    else{
+      let respuesta = await MySQL.realizarQuery(`INSERT INTO Puntaje_tetris(idUsuario, puntaje) VALUES(${req.session.userLoggeado}, "${req.body.puntaje}")`)
+      res.send({validar: true, puntaje: respuesta})
+    }
+    res.send({validar: true, puntaje: respuesta})
+  }
   console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje_tetris')))
-  res.send({puntaje: respuesta})
+  
 });
 
 app.get('/login', function(req, res)
@@ -239,7 +250,7 @@ app.post("/register", async (req, res) => {
   try {
     await authService.registerUser(auth, { email, password });
 
-    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris( email, es_admin) VALUES( "${req.body.email}", 0)`)
+    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(idUsuario, email, es_admin) VALUES("0", "${req.body.email}", 0)`)
     // let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
 
     // req.session.userLoggeado = userLoggeado[0]
@@ -269,7 +280,6 @@ app.post("/login", async (req, res) => {
     //console.log(userCredential)
     console.log(userCredential.user.uid)
     await MySQL.realizarQuery(`UPDATE Usuarios_tetris SET idUsuario = "${userCredential.user.uid}" WHERE email = "${req.body.email}"`)
-    //await MySQL.realizarQuery(`INSERT INTO Puntaje_tetris SET usuario = "${userCredential.user.uid}"`)
     let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
     req.session.userLoggeado = userLoggeado[0]
     console.log(req.session.userLoggeado)
