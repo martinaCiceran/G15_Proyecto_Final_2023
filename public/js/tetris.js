@@ -276,7 +276,7 @@ function jugar(){
 
     function enviarCuadricula(cuadricula){
         //cuadricula = document.getElementById("tetris")
-        console.log("Enviendo cuadricula al back")
+        console.log("Enviando cuadricula al back")
         console.log(cuadricula)
         socket.emit("mostrarCuadricula", {cuadricula: cuadricula})
     }

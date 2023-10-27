@@ -114,10 +114,12 @@ app.post('/sumarPuntaje', async function(req, res)
   for(let i= 0; i<usuariosPuntaje.length; i++) {
     if(usuariosPuntaje[i] == req.session.userLoggeado){
       let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris SET puntaje = puntaje + ${req.body.puntaje} WHERE idUsuario = ${req.session.userLoggeado})`)
+      console.log("Usuario modificado")
       res.send({validar: true, puntaje: respuesta})
     }
     else{
       let respuesta = await MySQL.realizarQuery(`INSERT INTO Puntaje_tetris(idUsuario, puntaje) VALUES(${req.session.userLoggeado}, "${req.body.puntaje}")`)
+      console.log("Usuario ingresado")
       res.send({validar: true, puntaje: respuesta})
     }
     res.send({validar: true, puntaje: respuesta})
@@ -371,59 +373,22 @@ io.on("connection", (socket) => {
   socket.on('nombreSala', async (data) => {
     console.log("Se conecto a la sala:", data.salaNombre);
     if(req.session.salaNombre != ""){
-        socket.leave(req.session.salaNombre)
+      socket.leave(req.session.salaNombre)
     }
     socket.join(data.salaNombre)
     req.session.salaNombre = data.salaNombre
-    io.to(data.salaNombre).emit("server-message", {mensaje:"te conectaste a..."}) //remplezar por dom, imnput del ftron
+    io.to(data.salaNombre).emit("server-message", {mensaje:"te conectaste a..."}) 
     req.session.save();
 
-    // let mensajes = await MySQL.realizarQuery(`SELECT mensaje, usuario, idChat, Mensajes.idContacto FROM Mensajes INNER JOIN Contactos ON Mensajes.idContacto = Contactos.idContacto WHERE Mensajes.idChat = ${req.session.salaNombre};`)
-    // for (let i = 0; i < mensajes.length; i++) {
-    //   if (mensajes[i].idContacto == req.session.usuario[0].idContacto) {
-    //       mensajes[i].idContacto = 1
-    //   } else {
-    //       mensajes[i].idContacto = 0
-    //   }
-    // }
-    // console.log(mensajes)
-    // io.to(data.salaNombre).emit("mensajes", {mensajes:mensajes})
-
   });
-
 
   socket.on('mostrarCuadricula', async (data) => {
-    console.log("Se conecto a la sala:", data.cuadricula);
+    console.log("Cuadricula:", data.cuadricula);
     req.session.cuadricula = data.cuadricula
-    if(req.session.salaNombre != ""){
-      socket.leave(req.session.cuadricula)
-    }
-    socket.join(data.salaNombre)
-    io.to(data.cuadricula).emit("server-message", {mensaje:"ENVIANDO CUADRICULA", cuadricula: data.cuadricula}) //remplezar por dom, imnput del ftron
+    io.to(req.session.salaNombre).emit("mostrarCuadricula", {mensaje:"ENVIANDO CUADRICULA", cuadricula: req.session.cuadricula})
     req.session.save();
 
   });
- 
-  // socket.on('nuevoMensaje', async data => {
-  //   console.log("Mensaje del input: ", data.mensaje, "sala:", req.session.salaNombre);
-  //   io.to(req.session.salaNombre).emit("server-message", { mensaje: data.mensaje });
-  //   await MySQL.realizarQuery(`INSERT INTO Mensajes(idChat, idContacto, fecha, mensaje) VALUES(${req.session.salaNombre}, ${req.session.usuario[0].idContacto}, NOW(), "${data.mensaje}") `)
-
-  //   let nombreP = await MySQL.realizarQuery(`SELECT usuario FROM Contactos WHERE idContacto = ${req.session.usuario[0].idContacto};`)
-
-  //   let mensajes = await MySQL.realizarQuery(`SELECT mensaje, usuario, idChat, Mensajes.idContacto FROM Mensajes INNER JOIN Contactos ON Mensajes.idContacto = Contactos.idContacto WHERE Mensajes.idChat = ${req.session.salaNombre} ORDER BY idMensaje DESC LIMIT 1;`)
-
-
-  //   if (mensajes.idContacto == req.session.usuario[0].idContacto) {
-  //     mensajes.idContacto = 1
-  //   } else {
-  //     mensajes.idContacto = 0
-  //   }
-      
-  //   io.to(req.session.salaNombre).emit("nuevo-mensaje", {mensaje: data.mensaje, nombreP:nombreP, idContacto: req.session.usuario[0].idContacto}) // aca lo que sucede es que mandamos el mensaje con el id al front :)
-
-  // });
-
   
 });
 //setInterval(() => io.emit("server-message", {mensaje:"MENSAJE DEL SERVIDOR"}), 2000);

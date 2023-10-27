@@ -19,6 +19,7 @@
     "http": "0.0.0",
     "mysql2": "^2.3.0",
     "nodemon": "^2.0.22",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "sweetalert2": "^11.7.32"
   }
 }
