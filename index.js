@@ -253,6 +253,7 @@ app.post("/register", async (req, res) => {
     await authService.registerUser(auth, { email, password });
 
     await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(idUsuario, email, es_admin) VALUES("0", "${req.body.email}", 0)`)
+
     // let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
 
     // req.session.userLoggeado = userLoggeado[0]
@@ -377,7 +378,7 @@ io.on("connection", (socket) => {
     }
     socket.join(data.salaNombre)
     req.session.salaNombre = data.salaNombre
-    io.to(data.salaNombre).emit("server-message", {mensaje:"te conectaste a..."}) 
+    io.to(req.session.salaNombre).emit("server-message", {mensaje:"te conectaste a la sala"}) 
     req.session.save();
 
   });
@@ -385,7 +386,7 @@ io.on("connection", (socket) => {
   socket.on('mostrarCuadricula', async (data) => {
     console.log("Cuadricula:", data.cuadricula);
     req.session.cuadricula = data.cuadricula
-    io.to(req.session.salaNombre).emit("mostrarCuadricula", {mensaje:"ENVIANDO CUADRICULA", cuadricula: req.session.cuadricula})
+    io.to(data.salaNombre).emit("cuadricula", {mensaje:"ENVIANDO CUADRICULA", cuadricula: req.session.cuadricula, user: req.session.userLoggeado})
     req.session.save();
 
   });
