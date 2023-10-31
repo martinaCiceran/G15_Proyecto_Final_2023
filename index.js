@@ -28,11 +28,35 @@ const app = express(); //Inicializo express para el manejo de las peticiones
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public')); //Expongo al lado cliente la carpeta "public"
+
+app.use(bodyParser.urlencoded({ extended: false })); //Inicializo el parser JSON
+app.use(bodyParser.json());
+
 app.engine('handlebars', exphbs({defaultLayout: 'main'})); //Inicializo Handlebars. Utilizo como base el layout "Main".
 app.set("view engine", "handlebars");
+
 const Listen_Port = 3000; //Puerto por el que estoy ejecutando la página Web
+
 const server=app.listen(Listen_Port, function() {
   console.log('Servidor NodeJS corriendo en http://localhost:' + Listen_Port + '/');
+});
+
+const io = require('socket.io')(server)
+
+
+app.set('view engine', 'handlebars'); //Inicializo Handlebars
+
+
+const sessionMiddleware=session({
+    secret: 'sararasthastka',
+    resave: true,
+    saveUninitialized: false,
+});
+
+app.use(sessionMiddleware)
+
+io.use(function(socket, next) {
+  sessionMiddleware(socket.request, socket.request.res, next)
 });
 
 // Configuración de Firebase
@@ -52,27 +76,7 @@ const auth = getAuth(appFirebase);
 // Importar AuthService
 const authService = require("./authService");
 
-app.use(bodyParser.urlencoded({ extended: false })); //Inicializo el parser JSON
-app.use(bodyParser.json());
-
-
-app.set('view engine', 'handlebars'); //Inicializo Handlebars
-
-
-
-
-
-const io= require('socket.io')(server);
-
-const sessionMiddleware=session({
-    secret: 'sararasthastka',
-    resave: true,
-    saveUninitialized: false,
-});
-
-io.engine.use(sessionMiddleware);
-
-app.use(session({secret: '123456', resave: true, saveUninitialized: true}));
+app.use(session({secret:'123456', resave: true, saveUninitialized: true}));
 
 /*
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
@@ -147,6 +151,7 @@ app.get('/home-admin', function(req, res)
 app.get('/option', function(req, res)
 {
   console.log("Soy un pedido GET", req.query);
+  console.log(req.session.userLoggeado)
   res.render('option', null);
 });
 
@@ -285,6 +290,7 @@ app.post("/login", async (req, res) => {
     await MySQL.realizarQuery(`UPDATE Usuarios_tetris SET idUsuario = "${userCredential.user.uid}" WHERE email = "${req.body.email}"`)
     let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
     req.session.userLoggeado = userLoggeado[0]
+    req.session.save();
     console.log(req.session.userLoggeado)
     // Aquí puedes redirigir al usuario a la página que desees después del inicio de sesión exitoso
     res.redirect("/option");
@@ -303,41 +309,6 @@ app.post("/login", async (req, res) => {
 //     console.log(usuario_puntaje)
 //     res.render('tablaRanking', {puntaje: usuario_puntaje});
 // })
-
-// app.post('/mostrarPregunta', async(req, res) => {
-//     try {
-//         const indice = req.body.indicePreguntaActual
-//         console.log(indice)
-//             // Realizar la consulta SQL para obtener las preguntas y respuestas desde la base de datos
-//         let result = await MySQL.realizarQuery(`SELECT id_pregunta, pregunta, opcion_1, 
-//         opcion_2, opcion_3, opcion_correcta FROM Preguntas WHERE id_pregunta = "${indice}"`);
-
-//         console.log(result)
-//         // Formatear los datos según sea necesario. row representa cada fila de la base de datos en cada iteración.
-//         // map  se utiliza para iterar sobre cada elemento (fila) del arreglo result y aplicar una función a cada elemento. 
-//         // En este caso, se está transformando cada fila en un nuevo objeto que contiene la información deseada.
-
-//         /* const preguntasRespuestas = result.map(row => ({
-//             id_pregunta: row.id_pregunta,
-//             pregunta: row.pregunta,
-//             opciones: [row.opcion_1, row.opcion_2, row.opcion_3, row.opcion_correcta]
-//         })); */
-
-//         if (result.length == 0) {
-//             //res.redirect('/tablaRanking');
-//             res.send([{validar: false}])
-//         } else {
-//             const preguntasRespuestas = result.map(row => ({
-//                 id_pregunta: row.id_pregunta,
-//                 pregunta: row.pregunta,
-//                 opciones: [row.opcion_1, row.opcion_2, row.opcion_3, row.opcion_correcta],
-//                 validar: true
-//             }));
-    
-//             // Enviar los datos como respuesta al cliente
-//             res.send(preguntasRespuestas);
-//         }
-
         
 //     } catch (error) {
 //         console.error("Error:", error);
@@ -373,23 +344,34 @@ io.on("connection", (socket) => {
   // });
   socket.on('nombreSala', async (data) => {
     console.log("Se conecto a la sala:", data.salaNombre);
-    if(req.session.salaNombre != ""){
-      socket.leave(req.session.salaNombre)
-    }
-    socket.join(data.salaNombre)
     req.session.salaNombre = data.salaNombre
-    io.to(req.session.salaNombre).emit("server-message", {mensaje:"te conectaste a la sala"}) 
     req.session.save();
+    
+    
 
   });
 
+  socket.on('unirseSala', async () => {
+    console.log("Se conecto a la sala:", req.session.salaNombre);
+    if(req.session.salaNombre != ""){
+      socket.leave(req.session.salaNombre)
+    }
+    socket.join( req.session.salaNombre)
+    io.to(req.session.salaNombre).emit("server-message", {mensaje:"te conectaste a la sala"}) 
+    req.session.save();
+  });
+
   socket.on('mostrarCuadricula', async (data) => {
-    console.log("Cuadricula:", data.cuadricula);
+    console.log(req.session.userLoggeado)
+    console.log(req.session.salaNombre)
+    // console.log("Cuadricula:", data.cuadricula);
     req.session.cuadricula = data.cuadricula
+    console.log(req.session.cuadricula)
     io.to(data.salaNombre).emit("cuadricula", {mensaje:"ENVIANDO CUADRICULA", cuadricula: req.session.cuadricula, user: req.session.userLoggeado})
     req.session.save();
 
   });
   
 });
+
 //setInterval(() => io.emit("server-message", {mensaje:"MENSAJE DEL SERVIDOR"}), 2000);

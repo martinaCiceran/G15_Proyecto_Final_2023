@@ -277,7 +277,7 @@ function jugar(){
     function enviarCuadricula(cuadricula){
         //cuadricula = document.getElementById("tetris")
         console.log("Enviando cuadricula al back")
-        console.log(cuadricula)
+        //console.log(cuadricula)
         socket.emit("mostrarCuadricula", {cuadricula: cuadricula})
     }
 
@@ -292,4 +292,5 @@ function closePopUp(){
     jugar()
 }
 
+unirseSala()
 

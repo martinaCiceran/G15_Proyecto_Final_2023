@@ -17,6 +17,10 @@ function uniseSala(){
     socket.emit("nombreSala", {salaNombre: botonId})
 }
 
+function unirseSala() {
+    socket.emit("unirseSala")
+}
+
 // este socket no se ejecuta
 socket.on("cuadricula", data => {
     console.log("el usuario es: ", data.user)
