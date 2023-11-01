@@ -92,17 +92,38 @@ app.use(session({secret:'123456', resave: true, saveUninitialized: true}));
 
 
 
+async function getColor(){
+  const response = await fetch("https://x-colors.yurace.pro/api/random/228");
+  const data = await response.json()
+  return data.hex
+}
+
+
 app.get('/', function(req, res)
 {
     console.log(req.query);
     res.render('inicio', null);
 });
 
-app.get('/tetris', function(req, res)
+app.post('/tetris', async function(req, res)
 {
-  console.log(req.query);
-  console.log("Soy un pedido GET /TETRIS", req.query);
-  res.render('tetris', null);
+  console.log(req.body);
+  console.log("Soy un pedido POST /TETRIS", req.body);
+  let color1 = await getColor()
+  let color2 = await getColor()
+  let color3 = await getColor()
+  let color4 = await getColor()
+  let color5 = await getColor()
+  let color6 = await getColor()
+  let color7 = await getColor()
+  console.log(color1)
+  console.log(color2)
+  console.log(color3)
+  console.log(color4)
+  console.log(color5)
+  console.log(color6)
+  console.log(color7)
+  res.render('tetris', {color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, color6: color6, color7: color7});
 });
 
 app.get('/gameOver', function(req, res)
@@ -177,43 +198,6 @@ app.get('/admin', async function(req, res)
     // console.log(preguntas[1].id_pregunta)
     res.render('administrador', {usuarios: usuarios});
 });
-
-// app.post('/leerPreguntas', async function(req, res)
-// {
-//     console.log("Soy un pedido POST", req.body);
-//     let respuesta = await MySQL.realizarQuery(`SELECT * FROM Preguntas WHERE id_pregunta = ${req.body.id}`)
-
-//     res.send({pregunta: respuesta[0]})
-
-// })
-
-
-// app.get('/jugar', function(req, res)
-// {
-//     console.log("Soy un pedido GET", req.query);
-//     res.render('jugar', null);
-// });
-
-// app.get('/inicio', function(req, res)
-// {
-//     console.log("Soy un pedido GET", req.query);
-//     res.render('inicio', null);
-// });
-
-// app.post('/home', function(req, res)
-// {
-//     console.log("Soy un pedido POST", req.body);
-//     res.render('home', null);
-// });
-
-// app.post('/modificarPregunta', async function(req, res)
-// {
-//     console.log("Modificar pregunta :)")
-    
-//     console.log("Soy un pedido POST /modificarPregunta");
-//     let respuesta = await MySQL.realizarQuery(`UPDATE Preguntas SET pregunta = "${req.body.pregunta}", opcion_1 = "${req.body.op_1}", opcion_2 = "${req.body.op_2}", opcion_3 = "${req.body.op_3}", opcion_correcta = "${req.body.op_correcta}" WHERE id_pregunta = ${req.body.id}`)
-//     res.send({preguntaMod: respuesta})
-// });
 
 app.post('/agregarUsuario', async function(req, res)
 {

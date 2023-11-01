@@ -187,3 +187,42 @@ async function fetchAgregarUsuario(data){
     fetchEditarUsuario(usuarioModificado)
     //let pregunta = fetchEditarPregunta(ID_pregunta)
   }
+
+  // async function fetchColoresPiezas(data){
+  //   //putJSON() es solo el nombre de esta funcion que lo pueden cambiar    
+  
+  //   try {
+  //     const response = await fetch("/tetris", {
+  //       method: "POST", 
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+        
+  //     //En result obtengo la respuesta
+  //     const result = await response.json();
+  //     console.log("Success:", result);
+  //     console.log("genial martu :)")
+      
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // } 
+  
+
+  // function coloresPiezas(){
+
+  
+    
+  //   let usuarioModificado = {
+  //     id: id_usuarioMod,
+  //     usuario: usuarioMod,
+  //     esAdmin: esAdminMod
+  //   }
+  
+  //   console.log(usuarioModificado)
+  
+  //   fetchEditarUsuario(usuarioModificado)
+  //   //let pregunta = fetchEditarPregunta(ID_pregunta)
+  // }
