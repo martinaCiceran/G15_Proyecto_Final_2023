@@ -22,7 +22,7 @@
 
 // function puntaje(puntaje) {
 //   //Leo los datos del input
-//   let puntaje = document.getElementById("puntaje").value
+//   let puntaje = puntaje
 //   //Creo un objeto de forma instantanea
 //   let data = {
 //     puntaje: puntaje

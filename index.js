@@ -364,12 +364,16 @@ io.on("connection", (socket) => {
   socket.on('mostrarCuadricula', async (data) => {
     console.log(req.session.userLoggeado)
     console.log(req.session.salaNombre)
-    // console.log("Cuadricula:", data.cuadricula);
     req.session.cuadricula = data.cuadricula
     console.log(req.session.cuadricula)
     io.to(data.salaNombre).emit("cuadricula", {mensaje:"ENVIANDO CUADRICULA", cuadricula: req.session.cuadricula, user: req.session.userLoggeado})
     req.session.save();
 
+  });
+
+  socket.on('puntaje', data => {
+    console.log("SOCKET PUNTAJE")
+    console.log("puntaje: ", data.puntaje)
   });
   
 });
