@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar</title>
 </head>
-<body>
-    <section class="section-login-registro" style="margin-top: 50px;">
-
-        <div class="mb-3 form-group">
-            <h2><strong>RANKING</strong></h2>
-        </div>
-
-        <div>
+<body class="fondoo" style="background-image: url(img/fondoso.png);">
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="section-login-registro">
+        <div class="mb-3 form-group" id="boxblanco">
+            <br>
+        <img src="img/ranking.png">
             <table class="table">
                 <thead>
                     <tr>
@@ -29,9 +30,19 @@
                     {{/each}}
                 </tbody>
             </table>
-        </div>
+       
 
     </section>
-    
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <form action="/tetris" method="GET"  class="form-inicio">
+        <div>
+            <input type="submit" class="botones" value="Jugar" id="gris">
+        </div>
+    </form>  
+     </div>
 </body>
 </html>
