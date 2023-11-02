@@ -38,6 +38,12 @@ const FORMAS = [
 ]
 
 // guardamos los colores de las piezas
+
+colorear()
+
+
+
+/*
 const COLORES = [
     "#fff",
     "#9b5fe0",
@@ -47,7 +53,7 @@ const COLORES = [
     "#efdf48",
     "#f9a52c",
     "#d64e12"
-]
+]*/
 
 const FILAS = 20;
 const COLUMNAS = 10;
@@ -65,6 +71,35 @@ function openPopUp(){
     popup.classList.add('open-popup');
 
 }
+
+
+async function colorear (){
+    let COLORES
+for (let i=0 ; i<8 ; i++)
+{
+try {
+    const colorsito = await fetch("http://x-colors.yurace.pro/api/random/", {
+      method: "GET",
+      mode: "cors",
+      credentials: "omit", 
+      headers: {
+        "Content-Type": "application/json",
+      },
+ });
+      
+    //En result obtengo la respuesta
+    console.log(colorsito.hex)
+    COLORES[i] = colorsito.hex
+    console.log(COLORES[i])
+  } catch (error) {
+    console.error("Error:", error);
+  }
+} 
+
+
+}
+
+
 
 
 function jugar(){
