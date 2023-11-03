@@ -267,6 +267,7 @@ app.post("/login", async (req, res) => {
     });
   }
 });
+
   
 app.get("/dashboard", (req, res) => {
   // Agrega aquí la lógica para mostrar la página del dashboard
@@ -333,3 +334,36 @@ app.get("/dashboard", (req, res) => {
 //     console.log("Soy un pedido DELETE", req.body); //En req.body vamos a obtener el objeto con los parámetros enviados desde el frontend por método DELETE
 //     res.send(null);
 // });
+
+const admin = require("firebase-admin");
+const serviceAccount = require("path/to/your/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "proyecto-final-54cc3.firebaseapp.com"
+});
+
+const db = admin.database();
+
+app.post('/login', async function(req, res) {
+    // Petición POST con URL = "/login"
+    console.log("Soy un pedido POST", req.body);
+    
+    try {
+        // Autenticación del usuario en Firebase
+        const user = await admin.auth().getUserByEmail(req.body.usuario);
+        
+        // Verificación de si el usuario es administrador
+        const esAdministrador = (await db.ref(`/usuarios/${user.uid}`).child('esAdministrador').once('value')).val();
+        
+        if (esAdministrador) {
+            // Redirigir a la página de administrador
+            res.redirect('/irAAdmin');
+        } else {
+            // Redirigir a la página de usuario normal
+            res.redirect('/home');
+        }
+    } catch (error) {
+        res.send({ validar: false });
+    }
+});
