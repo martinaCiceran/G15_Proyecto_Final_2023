@@ -115,8 +115,8 @@ flex-direction: row;
     display: flex;
     text-decoration: none;
     outline: none;
-    color: #de63af;
-    background-color: #342162 ;
+    color: #ffffff;
+    background-color: #550f6b ;
     border-color:  #000000;
     border-radius: 50px;
     justify-content: center;
@@ -248,4 +248,9 @@ border-color:  #000000;
 border-radius: 50px;
 justify-content: center;
 flex-direction: row;
+}
+
+
+#boton2{
+    
 }
