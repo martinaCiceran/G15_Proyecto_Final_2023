@@ -120,7 +120,7 @@ async function getColor(){
 app.get('/color', async function(req, res)
 {
   console.log("GET /color");
-  let colorBlanco =  "#fff"
+  // let colorBlanco =  "#fff"
   let color1 = await getColor()
   let color2 = await getColor()
   let color3 = await getColor()
@@ -135,7 +135,7 @@ app.get('/color', async function(req, res)
   console.log(color5)
   console.log(color6)
   console.log(color7)
-  res.send({colorBlanco: colorBlanco, color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, color6: color6, color7: color7});
+  res.send({/*colorBlanco: colorBlanco,*/ color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, color6: color6, color7: color7});
 });
 
 

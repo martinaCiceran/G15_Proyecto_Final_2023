@@ -39,10 +39,7 @@ const FORMAS = [
 
 // guardamos los colores de las piezas
 
-// colorear()
-
-
-async function fetchColoresPiezas(data){
+async function fetchColoresPiezas(){
     //putJSON() es solo el nombre de esta funcion que lo pueden cambiar    
     
     try {
@@ -50,15 +47,14 @@ async function fetchColoresPiezas(data){
         method: "GET", 
         headers: {
         "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        }
     });
         
     //En result obtengo la respuesta
     const result = await response.json();
     console.log("Success:", result);
     console.log("buenísimo :)")
-    colorBlanco = result.colorBlanco;
+    //colorBlanco = result.colorBlanco;
     color1 = result.color1;
     color2 = result.color2;
     color3 = result.color3;
@@ -73,7 +69,7 @@ async function fetchColoresPiezas(data){
 } 
 
 const COLORES = [
-    colorBlanco,
+    // colorBlanco,
     color1,
     color2,
     color3,
@@ -82,6 +78,17 @@ const COLORES = [
     color6,
     color7
 ]
+
+// const COLORES = [
+//     "#fff",
+//     "#9b5fe0",
+//     "#16a4d8",
+//     "#60dbe8",
+//     "#8bd346",
+//     "#efdf48",
+//     "#f9a52c",
+//     "#d64e12"
+// ]
 
 const FILAS = 20;
 const COLUMNAS = 10;
@@ -99,35 +106,6 @@ function openPopUp(){
     popup.classList.add('open-popup');
 
 }
-
-
-// async function colorear (){
-//     let COLORES
-// for (let i=0 ; i<8 ; i++)
-// {
-// try {
-//     const colorsito = await fetch("http://x-colors.yurace.pro/api/random/", {
-//       method: "GET",
-//       mode: "cors",
-//       credentials: "omit", 
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//  });
-      
-//     //En result obtengo la respuesta
-//     console.log(colorsito.hex)
-//     COLORES[i] = colorsito.hex
-//     console.log(COLORES[i])
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// } 
-
-
-// }
-
-
 
 
 function jugar(){
