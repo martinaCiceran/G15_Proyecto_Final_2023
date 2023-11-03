@@ -93,22 +93,18 @@ app.use(session({secret:'123456', resave: true, saveUninitialized: true}));
 
 
 async function getColor(){
-  const response = await fetch("https://x-colors.yurace.pro/api/random/228");
-  const data = await response.json()
-  return data.hex
-}
+  try {
+    const response = await fetch("https://x-colors.yurace.pro/api/random/228",);
+    const data = await response.json()
+    return data.hex
+  } catch (error) {
+    console.error("Error:", error);
+  }
+} 
 
-
-app.get('/', function(req, res)
+app.get('/color', async function(req, res)
 {
-    console.log(req.query);
-    res.render('inicio', null);
-});
-
-app.post('/tetris', async function(req, res)
-{
-  console.log(req.body);
-  console.log("Soy un pedido POST /TETRIS", req.body);
+  console.log("GET /color");
   let color1 = await getColor()
   let color2 = await getColor()
   let color3 = await getColor()
@@ -123,7 +119,22 @@ app.post('/tetris', async function(req, res)
   console.log(color5)
   console.log(color6)
   console.log(color7)
-  res.render('tetris', {color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, color6: color6, color7: color7});
+  res.send({color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, color6: color6, color7: color7});
+});
+
+
+
+app.get('/', function(req, res)
+{
+    console.log("GET /");
+    res.render('inicio', null);
+});
+
+app.post('/tetris', async function(req, res)
+{
+  console.log(req.body);
+  console.log("Soy un pedido POST /TETRIS", req.body);
+  res.render('tetris');
 });
 
 app.get('/gameOver', function(req, res)

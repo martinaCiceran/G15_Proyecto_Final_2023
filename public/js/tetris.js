@@ -39,7 +39,7 @@ const FORMAS = [
 
 // guardamos los colores de las piezas
 
-colorear()
+//colorear()
 
 
 
@@ -73,7 +73,7 @@ function openPopUp(){
 }
 
 
-async function colorear (){
+/*async function colorear (){
     let COLORES
 for (let i=0 ; i<8 ; i++)
 {
@@ -85,7 +85,7 @@ try {
       headers: {
         "Content-Type": "application/json",
       },
- });
+ });*/
       
     //En result obtengo la respuesta
     console.log(colorsito.hex)
