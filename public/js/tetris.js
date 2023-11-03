@@ -39,21 +39,49 @@ const FORMAS = [
 
 // guardamos los colores de las piezas
 
-colorear()
+// colorear()
 
 
+async function fetchColoresPiezas(data){
+    //putJSON() es solo el nombre de esta funcion que lo pueden cambiar    
+    
+    try {
+    const response = await fetch("/color", {
+        method: "GET", 
+        headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+        
+    //En result obtengo la respuesta
+    const result = await response.json();
+    console.log("Success:", result);
+    console.log("buenísimo :)")
+    colorBlanco = result.colorBlanco;
+    color1 = result.color1;
+    color2 = result.color2;
+    color3 = result.color3;
+    color4 = result.color4;
+    color5 = result.color5;
+    color6 = result.color6;
+    color7 = result.color7;
 
-/*
+    } catch (error) {
+    console.error("Error:", error);
+    }
+} 
+
 const COLORES = [
-    "#fff",
-    "#9b5fe0",
-    "#16a4d8",
-    "#60dbe8",
-    "#8bd346",
-    "#efdf48",
-    "#f9a52c",
-    "#d64e12"
-]*/
+    colorBlanco,
+    color1,
+    color2,
+    color3,
+    color4,
+    color5,
+    color6,
+    color7
+]
 
 const FILAS = 20;
 const COLUMNAS = 10;
@@ -73,31 +101,31 @@ function openPopUp(){
 }
 
 
-async function colorear (){
-    let COLORES
-for (let i=0 ; i<8 ; i++)
-{
-try {
-    const colorsito = await fetch("http://x-colors.yurace.pro/api/random/", {
-      method: "GET",
-      mode: "cors",
-      credentials: "omit", 
-      headers: {
-        "Content-Type": "application/json",
-      },
- });
+// async function colorear (){
+//     let COLORES
+// for (let i=0 ; i<8 ; i++)
+// {
+// try {
+//     const colorsito = await fetch("http://x-colors.yurace.pro/api/random/", {
+//       method: "GET",
+//       mode: "cors",
+//       credentials: "omit", 
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//  });
       
-    //En result obtengo la respuesta
-    console.log(colorsito.hex)
-    COLORES[i] = colorsito.hex
-    console.log(COLORES[i])
-  } catch (error) {
-    console.error("Error:", error);
-  }
-} 
+//     //En result obtengo la respuesta
+//     console.log(colorsito.hex)
+//     COLORES[i] = colorsito.hex
+//     console.log(COLORES[i])
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// } 
 
 
-}
+// }
 
 
 

@@ -226,3 +226,5 @@ async function fetchAgregarUsuario(data){
   //   fetchEditarUsuario(usuarioModificado)
   //   //let pregunta = fetchEditarPregunta(ID_pregunta)
   // }
+
+  
