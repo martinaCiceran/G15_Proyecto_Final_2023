@@ -53,31 +53,38 @@ async function fetchColoresPiezas(){
     //En result obtengo la respuesta
     const result = await response.json();
     console.log("Success:", result);
-    console.log("buenísimo :)")
+    console.log(result)
     //colorBlanco = result.colorBlanco;
-    color1 = result.color1;
-    color2 = result.color2;
-    color3 = result.color3;
-    color4 = result.color4;
-    color5 = result.color5;
-    color6 = result.color6;
-    color7 = result.color7;
+    color1 = result.colorsitos[0]
+    color2 = result.colorsitos[1];
+    color3 = result.colorsitos[2];
+    color4 = result.colorsitos[3];
+    color5 = result.colorsitos[4];
+    color6 = result.colorsitos[5];
+    color7 = result.colorsitos[6];
+    color8 = result.colorsitos[7]
 
+    console.log(color1)
+    console.log(color2)
+    console.log("buenísimo :)")
+    
     } catch (error) {
     console.error("Error:", error);
     }
 } 
 
+fetchColoresPiezas()
+
 const COLORES = [
-    // colorBlanco,
     color1,
     color2,
     color3,
     color4,
     color5,
     color6,
-    color7
-]
+    color7,
+    color8
+];
 
 // const COLORES = [
 //     "#fff",

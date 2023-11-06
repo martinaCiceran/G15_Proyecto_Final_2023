@@ -90,16 +90,6 @@ app.use(session({secret:'123456', resave: true, saveUninitialized: true}));
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
 */
 
-
-
-// async function getColor(){
-//   const response = await fetch("https://x-colors.yurace.pro/api/random/228");
-//   const data = await response.json()
-//   return data.hex
-// }
-
-
-
 app.get('/', function(req, res)
 {
     console.log(req.query);
@@ -135,7 +125,17 @@ app.get('/color', async function(req, res)
   console.log(color5)
   console.log(color6)
   console.log(color7)
-  res.send({/*colorBlanco: colorBlanco,*/ color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, color6: color6, color7: color7});
+  let colorsitos = [
+    colorBlanco =  "#fff",
+    color1 = await getColor(),
+    color2 = await getColor(),
+    color3 = await getColor(),
+    color4 = await getColor(),
+    color5 = await getColor(),
+    color6 = await getColor(),
+    color7 = await getColor()
+  ]
+  res.send({/*colorBlanco: colorBlanco, color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, color6: color6, color7: color7*/ colorsitos: colorsitos});
 });
 
 
