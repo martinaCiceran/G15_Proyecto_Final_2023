@@ -110,7 +110,7 @@ async function getColor(){
 app.get('/color', async function(req, res)
 {
   console.log("GET /color");
-  // let colorBlanco =  "#fff"
+  let colorBlanco =  "#fff"
   let color1 = await getColor()
   let color2 = await getColor()
   let color3 = await getColor()
@@ -355,7 +355,7 @@ io.on("connection", (socket) => {
 
   });
 
-  socket.on('unirseSala', async () => {
+  socket.on('unirseSala', async (data) => {
     console.log("Se conecto a la sala:", req.session.salaNombre);
     if(req.session.salaNombre != ""){
       socket.leave(req.session.salaNombre)

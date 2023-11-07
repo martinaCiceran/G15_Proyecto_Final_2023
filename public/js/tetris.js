@@ -39,6 +39,9 @@ const FORMAS = [
 
 // guardamos los colores de las piezas
 
+
+let colorBlanco, color1, color2, color3, color4, color5, color6, color7, color8;
+
 async function fetchColoresPiezas(){
     //putJSON() es solo el nombre de esta funcion que lo pueden cambiar    
     
@@ -55,14 +58,15 @@ async function fetchColoresPiezas(){
     console.log("Success:", result);
     console.log(result)
     //colorBlanco = result.colorBlanco;
-    color1 = result.colorsitos[0]
-    color2 = result.colorsitos[1];
-    color3 = result.colorsitos[2];
-    color4 = result.colorsitos[3];
-    color5 = result.colorsitos[4];
-    color6 = result.colorsitos[5];
-    color7 = result.colorsitos[6];
-    color8 = result.colorsitos[7]
+    colorBlanco = result.colorsitos[0]
+    color1 = result.colorsitos[1]
+    color2 = result.colorsitos[2];
+    color3 = result.colorsitos[3];
+    color4 = result.colorsitos[4];
+    color5 = result.colorsitos[5];
+    color6 = result.colorsitos[6];
+    color7 = result.colorsitos[7];
+    color8 = result.colorsitos[8]
 
     console.log(color1)
     console.log(color2)
@@ -73,18 +77,21 @@ async function fetchColoresPiezas(){
     }
 } 
 
-fetchColoresPiezas()
+await fetchColoresPiezas()
+console.log(color1)
 
 const COLORES = [
+    colorBlanco,
     color1,
     color2,
     color3,
     color4,
     color5,
     color6,
-    color7,
-    color8
+    color7
 ];
+
+console.log(COLORES)
 
 // const COLORES = [
 //     "#fff",
