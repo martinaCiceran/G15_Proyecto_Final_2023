@@ -77,32 +77,32 @@ async function fetchColoresPiezas(){
     }
 } 
 
-await fetchColoresPiezas()
-console.log(color1)
-
-const COLORES = [
-    colorBlanco,
-    color1,
-    color2,
-    color3,
-    color4,
-    color5,
-    color6,
-    color7
-];
-
-console.log(COLORES)
+/*await*/ fetchColoresPiezas()
+// console.log(color1)
 
 // const COLORES = [
-//     "#fff",
-//     "#9b5fe0",
-//     "#16a4d8",
-//     "#60dbe8",
-//     "#8bd346",
-//     "#efdf48",
-//     "#f9a52c",
-//     "#d64e12"
-// ]
+//     colorBlanco,
+//     color1,
+//     color2,
+//     color3,
+//     color4,
+//     color5,
+//     color6,
+//     color7
+// ];
+
+// console.log(COLORES)
+
+const COLORES = [
+    "#fff",
+    "#9b5fe0",
+    "#16a4d8",
+    "#60dbe8",
+    "#8bd346",
+    "#efdf48",
+    "#f9a52c",
+    "#d64e12"
+]
 
 const FILAS = 20;
 const COLUMNAS = 10;
