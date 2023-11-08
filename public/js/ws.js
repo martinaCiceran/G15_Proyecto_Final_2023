@@ -24,8 +24,36 @@ function unirseSala() {
 // este socket no se ejecuta
 socket.on("cuadricula", data => {
     console.log("el usuario es: ", data.user)
-    console.log("Me llego del servidor la cuadricula", data.cuaricula);
+    console.log("Me llego del servidor la cuadricula", data.cuadricula);
     renderizarCuadricula(data.cuadricula)
+    // no funciona
+    // como llamo a una funcion que esta adentro de otra funcion, en otro archivo .js
+});
+
+function salasDisponibles(){
+    socket.emit("salasDisponibles", {mensaje: "hola"})
+    console.log("onclick salas disponibles")
+}
+
+socket.on("salas", data => {
+    console.log(data)
+    render(data)
+});
+
+function render(salas){
+    var html=""
+    for(let i = 0; i<salas.length; i++){
+        html+= `<button type="submit" value="${salas[i].nombreSala}">${salas[i].nombreSala}</button>`
+    }
+    document.getElementById("option").innerHTML+=html
+}
+function mensajeSala() {
+    socket.emit("mensajeSala", {mensaje: "hola"})
+}
+
+socket.on("mensajeDelServidor", data => {
+    console.log("Me llego del servidor ", data);
+
     // no funciona
     // como llamo a una funcion que esta adentro de otra funcion, en otro archivo .js
 });

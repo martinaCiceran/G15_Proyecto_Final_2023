@@ -370,7 +370,7 @@ io.on("connection", (socket) => {
     console.log(req.session.salaNombre)
     req.session.cuadricula = data.cuadricula
     console.log(req.session.cuadricula)
-    io.to(data.salaNombre).emit("cuadricula", {mensaje:"ENVIANDO CUADRICULA", cuadricula: req.session.cuadricula, user: req.session.userLoggeado})
+    io.to(req.session.salaNombre).emit("cuadricula", {mensaje:"ENVIANDO CUADRICULA", cuadricula: req.session.cuadricula, user: req.session.userLoggeado})
     req.session.save();
 
   });
@@ -379,6 +379,22 @@ io.on("connection", (socket) => {
     console.log("SOCKET PUNTAJE")
     console.log("puntaje: ", data.puntaje)
   });
+
+  socket.on('salasDisponibles',async data => {
+    console.log("SALAS DISPONIBLES")
+    let salasDisponibles = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
+    console.log(salasDisponibles)
+    io.emit("salas", {salas:salasDisponibles});
+  });
+  
+  socket.on('mensajeSala', async (data) => {
+    console.log(data)
+    console.log(req.session.salaNombre)
+    io.to(req.session.salaNombre).emit("mensajeDelServidor", {mensaje:"ENVIANDO CUADRICULA"})
+    req.session.save();
+
+  });
+
   
 });
 
