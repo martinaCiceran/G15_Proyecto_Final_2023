@@ -185,7 +185,7 @@ async function fetchAgregarUsuario(data){
     console.log(usuarioModificado)
   
     fetchEditarUsuario(usuarioModificado)
-    //let pregunta = fetchEditarPregunta(ID_pregunta)
+    //let pregunta = fetchEditarPregunta(ID_pregunta) 
   }
 
   // async function fetchColoresPiezas(data){

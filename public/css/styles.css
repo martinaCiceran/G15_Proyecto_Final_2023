@@ -95,3 +95,7 @@ button {
 .close-jugar-btn {
     visibility: hidden;
 }
+
+.canva {
+    display: inline-block;
+}
