@@ -95,11 +95,15 @@ app.get('/', function(req, res)
     console.log(req.query);
     res.render('inicio', null);
 });
-
+function random(){
+  var ran = Math.floor(Math.random() * 10)
+  var tonos = ["red", "pink", "puprle", "navy", "blue", "aqua", "green", "lime", "yellow", "orange"]
+  return tonos[ran]
+}
 
 async function getColor(){
   try {
-    const response = await fetch("https://x-colors.yurace.pro/api/random/228",);
+    const response = await fetch("https://x-colors.yurace.pro/api/random/" + random());
     const data = await response.json()
     return data.hex
   } catch (error) {

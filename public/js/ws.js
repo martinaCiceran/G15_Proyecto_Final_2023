@@ -25,7 +25,7 @@ function unirseSala() {
 socket.on("cuadricula", data => {
     console.log("el usuario es: ", data.user)
     console.log("Me llego del servidor la cuadricula", data.cuadricula);
-    cuadriculaOpononete()
+    cuadriculaOpononete(data.cuadricula)
     //renderizarCuadricula(data.cuadricula)
     // no funciona
     // como llamo a una funcion que esta adentro de otra funcion, en otro archivo .js
@@ -69,8 +69,8 @@ function cuadriculaOpononete(){
     // scale() --> agrega una transformación de escala a las unidades del lienzo horizontal y/o verticalmente.
 
     let piezaObj = null;
-    let cuadricula = generarCuadricula()
-    console.log(cuadricula);
+    let cuadricula2 = generarCuadricula()
+    console.log(cuadricula2);
     // console.log(piezaObj)
     //enviarCuadricula(cuadricula)
 
@@ -108,17 +108,17 @@ function cuadriculaOpononete(){
 
     function checkCuadricula(){
         let contador = 0
-        for(let i = 0; i<cuadricula.length;i++){
+        for(let i = 0; i<cuadricula2.length;i++){
             let todoLleno = true;
-            for(let j = 0; j<cuadricula[i].length;j++){
-                if(cuadricula[i][j] == 0){
+            for(let j = 0; j<cuadricula2[i].length;j++){
+                if(cuadricula2[i][j] == 0){
                     todoLleno = false;
                 }
             }
             if(todoLleno){
                 // si las filas de las cuadriculas estan llenas, es decir, la cuadricula tiene todos 1s
-                cuadricula.splice(i,1) // borrar la fila
-                cuadricula.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) // y agregar una fila arriba de todo nueva y blanca
+                cuadricula2.splice(i,1) // borrar la fila
+                cuadricula2.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) // y agregar una fila arriba de todo nueva y blanca
                 contador++; // cuenta cuantas filas se borraron a la vez
             }
         } // si borraste 1, sumas 10p, si borraste 2, sumas 30p y asi.
@@ -160,7 +160,7 @@ function cuadriculaOpononete(){
                     if(piezaObj.pieza[i][j] == 1){
                         let p = piezaObj.x + j;
                         let q = piezaObj.y + i;
-                        cuadricula[q][p] = piezaObj.colorIndex;
+                        cuadricula2[q][p] = piezaObj.colorIndex;
                     }
                 }
             }
@@ -168,7 +168,7 @@ function cuadriculaOpononete(){
                 console.log("perdiste hermano")
                 enviarPuntaje(puntaje)
                 alert("Game Over")
-                cuadricula = generarCuadricula()
+                cuadricula2 = generarCuadricula()
                 puntaje = 0
                 // ACA TE TIENE QUE LLEVAR A LA PAGINA DE GAME OVER
             }
@@ -226,7 +226,7 @@ function cuadriculaOpononete(){
                     let p = x + j;
                     let q = y + i;
                     if(p>=0 && p<COLUMNAS && q>= 0 && q<FILAS){
-                        if(cuadricula[q][p]>0){
+                        if(cuadricula2[q][p]>0){
                             return true
                         }
                     } else{
@@ -239,20 +239,20 @@ function cuadriculaOpononete(){
     }
 
     function generarCuadricula(){
-        let cuadricula = [];
+        let cuadricula2 = [];
         for(let i=0; i<FILAS;i++){
-            cuadricula.push([])
+            cuadricula2.push([])
             for(let j = 0; j<COLUMNAS;j++){
-                cuadricula[i].push(0)
+                cuadricula2[i].push(0)
             }
         }
-        return cuadricula
+        return cuadricula2
     }
 
     function renderizarCuadricula(){
-        for(let i = 0; i<cuadricula.length;i++){
-            for(let j = 0; j<cuadricula[i].length;j++){
-                ctx2.fillStyle = COLORES[cuadricula[i][j]];
+        for(let i = 0; i<cuadricula2.length;i++){
+            for(let j = 0; j<cuadricula2[i].length;j++){
+                ctx2.fillStyle = COLORES[cuadricula2[i][j]];
                 ctx2.fillRect(j,i,1,1);
             }
         }

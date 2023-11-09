@@ -37,7 +37,9 @@ const FORMAS = [
     ]
 ]
 
-var colorBlanco, color1, color2, color3, color4, color5, color6, color7, color8;
+addEventListener("DOMContentLoaded", (event) => {
+
+    var colorBlanco, color1, color2, color3, color4, color5, color6, color7, color8;
 
     async function fetchColoresPiezas(){
         //putJSON() es solo el nombre de esta funcion que lo pueden cambiar    
@@ -73,34 +75,43 @@ var colorBlanco, color1, color2, color3, color4, color5, color6, color7, color8;
         console.error("Error:", error);
         }
     } 
+    async function main() {
+        await fetchColoresPiezas(); // Espera a que se obtengan los colores
+        COLORES.push(colorBlanco, color1, color2, color3, color4, color5, color6, color7);
+        console.log(COLORES);
+    }
+    
+    main()
+});
+
+// const COLORES = [
+//     colorBlanco,
+//     color1,
+//     color2,
+//     color3,
+//     color4,
+//     color5,
+//     color6,
+//     color7
+// ];
+
+var COLORES = []
 
 
-    //addEventListener("DOMContentLoaded", (event) => {});
 
-    fetchColoresPiezas()
-
-    // const COLORES = [
-    //     colorBlanco,
-    //     color1,
-    //     color2,
-    //     color3,
-    //     color4,
-    //     color5,
-    //     color6,
-    //     color7
-    // ];
+console.log(COLORES);
 
 
-    const COLORES = [
-        "#fff",
-        "#9b5fe0",
-        "#16a4d8",
-        "#60dbe8",
-        "#8bd346",
-        "#efdf48",
-        "#f9a52c",
-        "#d64e12"
-    ]
+// const COLORES = [
+//     "#fff",
+//     "#9b5fe0",
+//     "#16a4d8",
+//     "#60dbe8",
+//     "#8bd346",
+//     "#efdf48",
+//     "#f9a52c",
+//     "#d64e12"
+// ]
 
 // guardamos los colores de las piezas
 
