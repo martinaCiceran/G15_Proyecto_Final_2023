@@ -8,6 +8,7 @@
     
     Revisión 1 - Año 2021
 */
+
 //Cargo librerías instaladas y necesarias
 const express = require('express'); //Para el manejo del servidor Web
 const exphbs  = require('express-handlebars'); //Para el manejo de los HTML
@@ -26,7 +27,6 @@ app.set('view engine', 'handlebars'); //Inicializo Handlebars
 
 const Listen_Port = 3000; //Puerto por el que estoy ejecutando la página Web
 
-
 app.use(session({secret: '123456', resave: true, saveUninitialized: true}));
 
 /*
@@ -40,8 +40,6 @@ app.use(session({secret: '123456', resave: true, saveUninitialized: true}));
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
     A PARTIR DE ESTE PUNTO GENERAREMOS NUESTRO CÓDIGO (PARA RECIBIR PETICIONES, MANEJO DB, ETC.)
 */
-
-
 
 app.get('/', function(req, res)
 {
@@ -69,10 +67,17 @@ app.post('/sumarPuntaje', async function(req, res)
     res.send({puntaje: respuesta})
 });
 
-app.get('/login', function(req, res)
+app.get('/login', async function(req, res)
 {
   console.log("Soy un pedido GET", req.query);
   res.render('login', null);
+  let respuesta = await MySQL.realizarQuery(`SELECT * FROM Usuarios WHERE usuario = "${req.body.usuario}" AND password = "${req.body.contraseña}"`)
+  if (respuesta ==  1) {
+    res.render('irAAdmin');
+  }
+  else if (respuesta == 0) {
+    res.render('inicio');
+  }
 });
 
 app.get("/registro", (req, res) => {
@@ -104,6 +109,7 @@ app.get('/ranking', async function(req, res){
   // console.log(usuario_puntaje)
   res.render('ranking', null/*{puntaje: usuario_puntaje}*/);
 })
+
 app.get('/admin', async function(req, res)
 {
     console.log("Soy un pedido GET /iraadmin", req.query);
@@ -129,7 +135,6 @@ app.post('/login', async function(req, res)
 //     res.send({pregunta: respuesta[0]})
 
 // })
-
 
 // app.get('/jugar', function(req, res)
 // {
@@ -202,10 +207,8 @@ const {
     signOut,
     GoogleAuthProvider,
   } = require("firebase/auth");
-  
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
@@ -232,8 +235,7 @@ const auth = getAuth(appFirebase);
 
 // Importar AuthService
 const authService = require("./authService");
-
-  
+ 
 app.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
