@@ -384,7 +384,7 @@ io.on("connection", (socket) => {
     console.log("puntaje: ", data.puntaje)
   });
 
-  socket.on('salasDisponibles',async data => {
+  socket.on('salasDisponibles', async data => {
     console.log("SALAS DISPONIBLES")
     let salasDisponibles = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
     console.log(salasDisponibles)

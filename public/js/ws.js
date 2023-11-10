@@ -25,7 +25,7 @@ function unirseSala() {
 socket.on("cuadricula", data => {
     console.log("el usuario es: ", data.user)
     console.log("Me llego del servidor la cuadricula", data.cuadricula);
-    cuadriculaOpononete(data.cuadricula)
+    renderizarCuadriculaOponente(data.cuadricula)
     //renderizarCuadricula(data.cuadricula)
     // no funciona
     // como llamo a una funcion que esta adentro de otra funcion, en otro archivo .js
@@ -59,220 +59,27 @@ socket.on("mensajeDelServidor", data => {
     // como llamo a una funcion que esta adentro de otra funcion, en otro archivo .js
 });
 
-function cuadriculaOpononete(){
 
+// Suponiendo que cuadriculaOponente contiene la cuadrícula recibida del oponente
+
+function renderizarCuadriculaOponente(cuadriculaOponente) {
     const FILAS = 20;
     const COLUMNAS = 10;
-    let canvas2 = document.getElementById("tetris2"); // agarra el primer elemento con id tetris
-    let ctx2 = canvas2.getContext("2d") // para poder dibujar en el canvas
-    ctx2.scale(15,15) // 30 * 20(filas) = 600(handlebaras) -- 30 * 10(filas) = 300(handlebaras)
-    // scale() --> agrega una transformación de escala a las unidades del lienzo horizontal y/o verticalmente.
+    let canvas2 = document.getElementById("tetris2");
+    let ctx2 = canvas2.getContext("2d");
+    //ctx2.clearRect(0, 0, canvas2.width, canvas2.height); // Limpiar el canvas
+    //ctx.scale(15,15) // 30 * 20(filas) = 600(handlebaras) -- 30 * 10(filas) = 300(handlebaras)
 
-    let piezaObj = null;
-    let cuadricula2 = generarCuadricula()
-    console.log(cuadricula2);
-    // console.log(piezaObj)
-    //enviarCuadricula(cuadricula)
+    const anchoCelda = canvas2.width / COLUMNAS; // Calcula el ancho de cada celda
+    const altoCelda = canvas2.height / FILAS; // Calcula el alto de cada celda
 
-    function generarPiezaRandom(){
-        let ran = Math.floor(Math.random() * 7) // devuelve un numero random del 0 al 7 --> Math.floor() devuelve un numero sin coma
-        // console.log(FORMAS[ran])
-        let pieza = FORMAS[ran]
-        let colorIndex = ran + 1 
-        /* Aca creamos las cordenadas por donde va a aparecer la pieza.
-        y = 0, porque empieza arriba de todo (las filas)
-        x = 4, (puede ser 5), porque queremos que la pieza empiece en el medio, y como tenemos 10 columnas, ponemos 4 ó 5, par que quede bien centradas todas las piezas
-        */
-
-        let x = 4
-        let y = 0
-        return{pieza,x,y,colorIndex} 
-        /*
-            Retorna un objeto con los atributos:
-            pieza --> devuelve el array random correspondiente
-            x, --> devuelve coordenadas
-            colorIndex --> devuelve el color random
-        */ 
-    }
-
-    setInterval(nuevoEstadoDeJuego,500) // genera un intervalo donde cada 500 milisegundos, se ejecuta la funcion nuevoEstadoDeJuego
-
-    function nuevoEstadoDeJuego(){
-        checkCuadricula();
-        if(piezaObj == null){ // si piezaObj es igual a null, generar pieza random y renderizarla
-            piezaObj = generarPiezaRandom();
-            renderizarPieza()
-        }
-        moverAbajo()
-    }
-
-    function checkCuadricula(){
-        let contador = 0
-        for(let i = 0; i<cuadricula2.length;i++){
-            let todoLleno = true;
-            for(let j = 0; j<cuadricula2[i].length;j++){
-                if(cuadricula2[i][j] == 0){
-                    todoLleno = false;
-                }
-            }
-            if(todoLleno){
-                // si las filas de las cuadriculas estan llenas, es decir, la cuadricula tiene todos 1s
-                cuadricula2.splice(i,1) // borrar la fila
-                cuadricula2.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) // y agregar una fila arriba de todo nueva y blanca
-                contador++; // cuenta cuantas filas se borraron a la vez
-            }
-        } // si borraste 1, sumas 10p, si borraste 2, sumas 30p y asi.
-        if(contador == 1){
-            puntaje+=10;
-        } else if(contador == 2){
-            puntaje+=30;
-        }else if(contador == 3){
-            puntaje+=50;
-        }else if(contador > 3){
-            puntaje+=100;
-        }
-
-        // enviarCuadricula(cuadricula)
-
-        tablaPuntaje.innerHTML = puntaje;
-
-    }
-
-
-    function renderizarPieza(){
-        let pieza = piezaObj.pieza; // llama al atributo pieza del objeto
-        for(let i = 0; i<pieza.length;i++){ 
-            for(let j = 0;j<pieza[i].length;j++){
-                if(pieza[i][j] == 1){ 
-                    ctx2.fillStyle = COLORES[piezaObj.colorIndex] // fillStyle() devuelve el color para rellenar el dibujo.
-                    ctx2.fillRect(piezaObj.x+j,piezaObj.y+i,1,1) //  fillRect() dibuja la pieza "rellena" -- centra la pieza en el medio del tablero
-                }
+    for (let i = 0; i < cuadriculaOponente.length; i++) {
+        for (let j = 0; j < cuadriculaOponente[i].length; j++) {
+            if (cuadriculaOponente[i][j] !== 0) { // Si la celda está ocupada (contiene un valor distinto de 0)
+                ctx2.fillStyle = COLORES[cuadriculaOponente[i][j]]; // Elige el color correspondiente
+                ctx2.fillRect(j * anchoCelda, i * altoCelda, anchoCelda, altoCelda); // Dibuja la celda
             }
         }
     }
-
-    function moverAbajo(){
-        if(!colision(piezaObj.x, piezaObj.y+1)){
-            piezaObj.y+=1; // cambia coordenadas de y para que baje una fila
-        }else{ 
-            for(let i = 0; i<piezaObj.pieza.length;i++){
-                for(let j = 0;j<piezaObj.pieza[i].length;j++){
-                    if(piezaObj.pieza[i][j] == 1){
-                        let p = piezaObj.x + j;
-                        let q = piezaObj.y + i;
-                        cuadricula2[q][p] = piezaObj.colorIndex;
-                    }
-                }
-            }
-            if(piezaObj.y == 0){
-                console.log("perdiste hermano")
-                enviarPuntaje(puntaje)
-                alert("Game Over")
-                cuadricula2 = generarCuadricula()
-                puntaje = 0
-                // ACA TE TIENE QUE LLEVAR A LA PAGINA DE GAME OVER
-            }
-            piezaObj = null;
-        }
-        renderizarCuadricula()
-    }
-
-    function moverIzquierda(){
-        if(!colision(piezaObj.x-1, piezaObj.y)){ //  si no hay colision, la pieza se mueve
-            piezaObj.x -=1
-        }
-        renderizarCuadricula()
-    }
-
-    function moverDerecha(){
-        if(!colision(piezaObj.x+1, piezaObj.y)){
-            piezaObj.x +=1
-        }
-        renderizarCuadricula()
-    }
-
-    function rotar(){
-        let piezaRotada = [];
-        let pieza = piezaObj.pieza;
-        
-        // crea una pieza del mismo tamaño que la que queremos rotar, pero sin forma
-        for(let i = 0; i<pieza.length;i++){
-            piezaRotada.push([])
-            for(let j = 0;j<pieza[i].length; j++){
-                piezaRotada[i].push(0);
-            }
-        }
-
-        for(let i = 0; i<pieza.length;i++){
-            for(let j = 0; j<pieza[i].length;j++){
-                piezaRotada[i][j] = pieza[j][i]; // da vuelta las filas y las columnas para que rote la pieza
-            }
-        }
-
-        for(let i = 0;i<piezaRotada.length;i++){
-            piezaRotada[i] = piezaRotada[i].reverse(); // reverse() --> da vuelta el los elementos del array, el que esta primero, va ultimo y asi
-        }
-        if(!colision(piezaObj.x, piezaObj.y, piezaRotada)){
-            piezaObj.pieza = piezaRotada        
-        }
-        renderizarCuadricula()
-    }
-
-    function colision(x,y, piezaRotada){ // esta funcio sirve para que la pieza no se vaya del tablero
-        let pieza = piezaRotada || piezaObj.pieza; // recive o la pieza rotada o la piezaObj
-        for(let i = 0;i<pieza.length; i++){
-            for(let j = 0; j<pieza[i].length;j++){
-                if(pieza[i][j] == 1){
-                    let p = x + j;
-                    let q = y + i;
-                    if(p>=0 && p<COLUMNAS && q>= 0 && q<FILAS){
-                        if(cuadricula2[q][p]>0){
-                            return true
-                        }
-                    } else{
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    }
-
-    function generarCuadricula(){
-        let cuadricula2 = [];
-        for(let i=0; i<FILAS;i++){
-            cuadricula2.push([])
-            for(let j = 0; j<COLUMNAS;j++){
-                cuadricula2[i].push(0)
-            }
-        }
-        return cuadricula2
-    }
-
-    function renderizarCuadricula(){
-        for(let i = 0; i<cuadricula2.length;i++){
-            for(let j = 0; j<cuadricula2[i].length;j++){
-                ctx2.fillStyle = COLORES[cuadricula2[i][j]];
-                ctx2.fillRect(j,i,1,1);
-            }
-        }
-        renderizarPieza()
-    }
-
-    document.addEventListener("keydown", function(e){
-        let key = e.code;
-        console.log(key)
-        if(key == "ArrowDown"){
-            moverAbajo()
-        } else if(key == "ArrowLeft"){
-            moverIzquierda()
-        }else if(key == "ArrowRight"){
-            moverDerecha()
-        }else if(key == "ArrowUp"){
-        rotar()
-        }
-    })
-
-
-    
 }
+
