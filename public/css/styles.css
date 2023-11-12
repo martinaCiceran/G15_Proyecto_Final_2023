@@ -168,11 +168,14 @@ flex-direction: row;
 }
   
 #gris1:hover {
-background-color: #342162 ;
-color:#eb2ad1  ;
-border-color: #ddd;
-border-radius: 50px;
-}
+    background-color: #342162 ;
+    color:#eb2ad1  ;
+    border-color: #ddd;
+    border-radius: 50px;
+    }
+
+
+
 .fondoo{
     background-image: url("/public/img/tetris3.png");
   }
