@@ -31,23 +31,24 @@ socket.on("cuadricula", data => {
     // como llamo a una funcion que esta adentro de otra funcion, en otro archivo .js
 });
 
-function salasDisponibles(){
-    socket.emit("salasDisponibles", {mensaje: "hola"})
-    console.log("onclick salas disponibles")
-}
+// function salasDisponibles(){
+//     socket.emit("salasDisponibles", {mensaje: "hola"})
+//     console.log("onclick salas disponibles")
+// }
 
-socket.on("salas", data => {
-    console.log(data)
-    render(data)
-});
+// socket.on("salas", data => {
+//     console.log(data)
+//     render(data)
+// });
 
-function render(salas){
-    var html=""
-    for(let i = 0; i<salas.length; i++){
-        html+= `<button type="submit" value="${salas[i].nombreSala}">${salas[i].nombreSala}</button>`
-    }
-    document.getElementById("option").innerHTML+=html
-}
+// function render(salas){
+//     var html=""
+//     for(let i = 0; i<salas.length; i++){
+//         html+= `<button type="submit" value="${salas[i].nombreSala}">${salas[i].nombreSala}</button>`
+//     }
+//     document.getElementById("option").innerHTML+=html
+// }
+
 function mensajeSala() {
     socket.emit("mensajeSala", {mensaje: "hola"})
 }
@@ -83,3 +84,48 @@ function renderizarCuadriculaOponente(cuadriculaOponente) {
     }
 }
 
+async function fetchSalas(){
+    try {
+        const response = await fetch("/fetchSalas", {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+            },
+        });
+
+        const result = await response.json()
+        console.log("Success:", result)
+        return result
+    } catch (error) {
+        console.log("Error:", error)
+    }
+}
+
+async function cargarSalas(){
+    let salas = await fetchSalas()
+    if (salas.length > 0){
+        renderBotones(salas.salas)
+    } else{
+        changeScreen()
+    }
+}
+
+function renderBotones(salas){
+    var html = "";
+    for (let i = 0; i<salas.length; i++){
+        html+= `<button id="${salas[i].idSala} name="${salas[i].nombreSala}" onclick="uniseSala()">${salas[i].nombreSala}</button>`
+    }
+    document.getElementById("listadoSalas").innerHTML += html
+}
+
+function changeScreen(){
+    const salaCreacion = document.getElementById("crearSala")
+    const salaDeEspera = document.getElementById("salaDeEspera")
+    if(salaDeEspera.style.display !== "none"){
+        salaDeEspera.style.display = "none";
+        salaCreacion.style.display = ""
+    } else{
+        salaDeEspera.style.display = "";
+        salaCreacion.style.display = "none"
+    }
+}

@@ -265,7 +265,7 @@ app.post("/register", async (req, res) => {
   try {
     await authService.registerUser(auth, { email, password });
 
-    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(idUsuario, email, es_admin) VALUES("0", "${req.body.email}", 0)`)
+    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(idUsuario, email, es_admin, nombreUsuario) VALUES("0", "${req.body.email}", 0, "${req.body.nombreUsuario}")`)
 
     // let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
 
@@ -336,7 +336,11 @@ app.post("/login", async (req, res) => {
 //     res.send(null);
 // });
 
-
+app.get("/fetchSalas", async (req, res) => {
+  let salas = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris WHERE jugador2 = 0`)
+  console.log(salas)
+  res.send({salas:salas})
+})
 
 io.on("connection", (socket) => {
   //Esta línea es para compatibilizar con lo que venimos escribiendo
@@ -354,9 +358,6 @@ io.on("connection", (socket) => {
     console.log("Se conecto a la sala:", data.salaNombre);
     req.session.salaNombre = data.salaNombre
     req.session.save();
-    
-    
-
   });
 
   socket.on('unirseSala', async (data) => {
@@ -384,12 +385,12 @@ io.on("connection", (socket) => {
     console.log("puntaje: ", data.puntaje)
   });
 
-  socket.on('salasDisponibles', async data => {
-    console.log("SALAS DISPONIBLES")
-    let salasDisponibles = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
-    console.log(salasDisponibles)
-    io.emit("salas", {salas:salasDisponibles});
-  });
+  // socket.on('salasDisponibles', async data => {
+  //   console.log("SALAS DISPONIBLES")
+  //   let salasDisponibles = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
+  //   console.log(salasDisponibles)
+  //   io.emit("salas", {salas:salasDisponibles});
+  // });
   
   socket.on('mensajeSala', async (data) => {
     console.log(data)
