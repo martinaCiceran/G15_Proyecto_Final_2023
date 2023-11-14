@@ -338,6 +338,7 @@ app.post("/login", async (req, res) => {
 
 app.get("/fetchSalas", async (req, res) => {
   let salas = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris`)
+
   console.log(salas)
   res.send({salas:salas})
 })
@@ -360,6 +361,12 @@ io.on("connection", (socket) => {
     console.log('req.session.salaNombre: ', req.session.salaNombre)
     //await MySQL.realizarQuery(`UPDATE  Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
 
+
+    req.session.save();
+  });
+
+  socket.on('unirseSala', async (data) => {
+    console.log("Se conecto a la sala:", req.session.salaNombre);
     if(req.session.salaNombre != ""){
       socket.leave(req.session.salaNombre)
     }
