@@ -95,11 +95,15 @@ app.get('/', function(req, res)
     console.log(req.query);
     res.render('inicio', null);
 });
-
+function random(){
+  var ran = Math.floor(Math.random() * 10)
+  var tonos = ["red", "pink", "puprle", "navy", "blue", "aqua", "green", "lime", "yellow", "orange"]
+  return tonos[ran]
+}
 
 async function getColor(){
   try {
-    const response = await fetch("https://x-colors.yurace.pro/api/random/228",);
+    const response = await fetch("https://x-colors.yurace.pro/api/random/" + random());
     const data = await response.json()
     return data.hex
   } catch (error) {
@@ -261,7 +265,7 @@ app.post("/register", async (req, res) => {
   try {
     await authService.registerUser(auth, { email, password });
 
-    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(idUsuario, email, es_admin) VALUES("0", "${req.body.email}", 0)`)
+    await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(idUsuario, email, es_admin, nombreUsuario) VALUES("0", "${req.body.email}", 0, "${req.body.nombreUsuario}")`)
 
     // let userLoggeado = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${userCredential.user.uid}" AND email = "${req.body.email}"`)
 
@@ -332,7 +336,11 @@ app.post("/login", async (req, res) => {
 //     res.send(null);
 // });
 
-
+app.get("/fetchSalas", async (req, res) => {
+  let salas = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris`)
+  console.log(salas)
+  res.send({salas:salas})
+})
 
 io.on("connection", (socket) => {
   //Esta línea es para compatibilizar con lo que venimos escribiendo
@@ -349,19 +357,39 @@ io.on("connection", (socket) => {
   socket.on('nombreSala', async (data) => {
     console.log("Se conecto a la sala:", data.salaNombre);
     req.session.salaNombre = data.salaNombre
-    req.session.save();
-    
-    
+    console.log('req.session.salaNombre: ', req.session.salaNombre)
+    //await MySQL.realizarQuery(`UPDATE  Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
 
-  });
-
-  socket.on('unirseSala', async (data) => {
-    console.log("Se conecto a la sala:", req.session.salaNombre);
     if(req.session.salaNombre != ""){
       socket.leave(req.session.salaNombre)
     }
-    socket.join( req.session.salaNombre)
-    io.to(req.session.salaNombre).emit("server-message", {mensaje:"te conectaste a la sala"}) 
+
+    let jugadoresEnSala = await MySQL.realizarQuery(`SELECT cant_jugadores FROM Salas_tetris WHERE idSala = ${req.session.salaNombre}`)
+    console.log("jugadores en sala: ", jugadoresEnSala)
+
+    if (jugadoresEnSala == 0) {
+      socket.join(req.session.salaNombre)
+      await MySQL.realizarQuery(`UPDATE Salas_tetris SET cant_jugadores = cant_jugadores + 1 where idSala = ${req.session.salaNombre};`)
+      console.log("jugadores en sala: ", jugadoresEnSala)
+      io.to(req.session.salaNombre).emit("server-message", {mensaje:"te conectaste a la sala"}) 
+    } else if(jugadoresEnSala == 1){
+      console.log("Sos el segundo jugador. La sala esta lista para empezar")
+      await MySQL.realizarQuery(`UPDATE Salas_tetris SET cant_jugadores = cant_jugadores + 1 where idSala = ${req.session.salaNombre};`)
+      console.log("jugadores en sala: ", jugadoresEnSala)
+      io.to('nombreSala').emit('salaListaParaEmpezar');
+    } else if(jugadoresEnSala === 2){
+      // Si hay dos jugadores, la sala está lista para empezar
+      io.to('nombreSala').emit('salaListaParaEmpezar');
+    } else{
+      console.log("ERROR")
+    }
+    req.session.save();
+  });
+
+
+  socket.on('unirseSala', async (data) => {
+    console.log("socket unirseSala")
+    console.log("Se conecto a la sala:", req.session.salaNombre);
     req.session.save();
   });
 
@@ -380,12 +408,12 @@ io.on("connection", (socket) => {
     console.log("puntaje: ", data.puntaje)
   });
 
-  socket.on('salasDisponibles',async data => {
-    console.log("SALAS DISPONIBLES")
-    let salasDisponibles = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
-    console.log(salasDisponibles)
-    io.emit("salas", {salas:salasDisponibles});
-  });
+  // socket.on('salasDisponibles', async data => {
+  //   console.log("SALAS DISPONIBLES")
+  //   let salasDisponibles = await MySQL.realizarQuery(`SELECT * FROM Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
+  //   console.log(salasDisponibles)
+  //   io.emit("salas", {salas:salasDisponibles});
+  // });
   
   socket.on('mensajeSala', async (data) => {
     console.log(data)

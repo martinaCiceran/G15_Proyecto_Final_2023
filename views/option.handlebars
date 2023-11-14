@@ -1,4 +1,3 @@
-
 {{!-- <form action="/option" method="post"> --}}
     <head>
         <meta charset="UTF-8">
@@ -6,17 +5,47 @@
         <title>ELIGE UNA OPCIÓN</title>
     </head>
     <body>
-        <h3>Elija una sala</h3>
-        <div class="contenedor" id="option">
+        <section id="salas">
+            <script>
+            window.onload = function() {
+                cargarSalas(); // Esta función se ejecutará cuando la página se cargue
+            }
+            </script>
 
-            <form action="/tetris" method="GET" class="container-sm">
-                <div class="mb-3 form-check">
-                    <input type="submit" class="btn btn-primary" id="multijugador" onclick="uniseSala()" value="Multijugador">
+            <h3>Elija una sala</h3>
+
+            <section id="crearSala">
+                <h3>Crear Sala</h3>
+            </section>
+
+            <section id="botones">
+                <h3>Sala de espera</h3>
+                <div id="listadoSalas">
+
                 </div>
-            </form>
+            </section>
+            <div class="contenedor">
+                <div class="mb-3 form-check">
+                    <button id="multijugador" name="multijugador" onclick="uniseSala(this)" onclick="uniseSala()" >multijugador</button>
+                </div>
 
-        </div>
+            </div>
+        </section>
+        <section id="salaDeEspera" style="display: none;">
+            <h3>SALA DE ESPERA</h3>
+            <h5>Esperando a otro jugador</h5>
+        </section>
+        <div id="botonEmpezar" style="display: none;">
+                <form action="/tetris" method="GET" class="container-sm">
+                    <div class="mb-3 form-check">
+                        <input type="submit" class="btn btn-primary" id="multijugador" onclick="uniseSala()" value="Multijugador">
+                    </div>
+                </form>
+            </div>
+    </body>
 
 {{!-- </form> --}}
+
+    
 
     
