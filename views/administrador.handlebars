@@ -16,15 +16,23 @@
 
         <div class="mb-3 form-group">
             <label for="id_usuario" class="form-label">Elegir usuario</label>
-            <select id="selectUsuarios" onchange="leerUsuarios()">
+            <select id="selectUsuarios"  onchange="leerUsuarios()"> 
                 {{#each usuarios}}
-                    <option value="{{this.id_usuarios}}">{{this.id_usuarios}}</option>
+                    <option value="{{this.idUsuario}}" id="{{this.idUsuario}}">{{this.nombreUsuario}}</option>
                 {{/each}}
             </select>
         </div>
         <div class="mb-3 form-group">
             <label for="nombreDeUsuario" class="form-label">Usuario</label>
             <input type="text" class="form-control" id="usuario" name="usuario" value="" placeholder="Usuario">
+        </div>
+        <div class="mb-3 form-group">
+            <label for="nombreDeUsuario" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" name="email" value="" placeholder="Email">
+        </div>
+        <div class="mb-3 form-group">
+            <label for="nombreDeUsuario" class="form-label">Contraseña</label>
+            <input type="text" class="form-control" id="password" name="password" value="" placeholder="Contraseña">
         </div>
         <div class="mb-3 form-group">
             <label for="id_usuario" class="form-label">Es administrador</label>

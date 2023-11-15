@@ -37,7 +37,7 @@ async function fetchLeerUsuario(usuario) {
   //putJSON() es solo el nombre de esta funcion que lo pueden cambiar    
 
   try {
-    const response = await fetch("/admin", {
+    const response = await fetch("/leerUsuarios", {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,14 @@ async function fetchLeerUsuario(usuario) {
     const result = await response.json();
     console.log("Success:", result);
 
-    document.getElementById("usuario").value = result.usuario.usuario;
+    document.getElementById("usuario").value = result.usuario.nombreUsuario;
+    document.getElementById("email").value = result.usuario.email
+    if(result.usuario.es_admin == 0){
+      document.getElementById("esAdmin").value = "No"
+    } else{
+      document.getElementById("esAdmin").value = "Si"
+
+    }
     
 
   } catch (error) {
@@ -62,12 +69,13 @@ async function fetchLeerUsuario(usuario) {
 // LEER PREGUNTAS
 function leerUsuarios() {
   //Leo los datos del select
-  let nombreUsuario = document.getElementById("selectUsuarios").value
+  let selectUsuarios = document.getElementById("selectUsuarios").value
 
   //Creo un objeto de forma instantanea
   let usuario = {
-    usuario: nombreUsuario
+    usuario: selectUsuarios
   }
+  console.log("ESTO ES EL leerUsuarios()")
   console.log(usuario)
   //pregunta es el objeto que le paso al back
   fetchLeerUsuario(usuario)
@@ -99,12 +107,15 @@ async function fetchAgregarUsuario(data){
   // MODIFICAR PREGUNTAS 
   function agregarUsuarios(){
     let nuevoUsuario = document.getElementById("usuario").value
+    let nuevoEmail = document.getElementById("email").value
     let nuevoSiEsAdmin = document.getElementById("esAdmin").value
+
     let usuarioNuevo = {
       usuario: nuevoUsuario,
+      email: nuevoEmail,
       esAdmin: nuevoSiEsAdmin
-    }
-  
+    }  
+    console.log("ESTO ES agregarUsuarios()")
     console.log(usuarioNuevo)
   
     fetchAgregarUsuario(usuarioNuevo)
@@ -173,9 +184,7 @@ async function fetchAgregarUsuario(data){
     let id_usuarioMod = document.getElementById("selectUsuarios").value
     let usuarioMod = document.getElementById("usuario").value
     let esAdminMod = document.getElementById("esAdmin").value
-    
-  
-  
+
     let usuarioModificado = {
       id: id_usuarioMod,
       usuario: usuarioMod,

@@ -216,27 +216,69 @@ app.get('/ranking', async function(req, res){
 
 app.get('/admin', async function(req, res)
 {
-    console.log("Soy un pedido GET /iraadmin", req.query);
-    let usuarios = await MySQL.realizarQuery("SELECT nombreUsuario FROM Usuarios_tetris;");
+    console.log("Soy un pedido GET /admin", req.query);
+    let usuarios = await MySQL.realizarQuery("SELECT * FROM Usuarios_tetris;");
     console.log(usuarios)
     // console.log(preguntas[1].id_pregunta)
+    console.log(usuarios[0].nombreUsuario)
     res.render('administrador', {usuarios: usuarios});
 });
 
+
+app.post('/leerUsuarios', async function(req, res)
+{
+  console.log("Soy un pedido POST /leerUsuarios", req.body);
+  let respuesta = await MySQL.realizarQuery(`SELECT * FROM Usuarios_tetris WHERE idUsuario = "${req.body.usuario}"`)
+  console.log( "la respuesta es: ", respuesta)
+  console.log(respuesta[0])
+  res.send({usuario: respuesta[0]})
+
+})
+
+
 app.post('/agregarUsuario', async function(req, res)
 {
-    console.log("Agregar Usuario")
-    let nombreUsuario = req.body.usuarioNombre;
-    let esAdmin = req.body.selectUsuarios;
-    
-    if(nombreUsuario == "" || esAdmin == ""){0
-      console.log("Uno de los campos está vacío")   
-    }
-    else{
-      let respuesta = await MySQL.realizarQuery(`INSERT INTO Usuarios(usuario, adminstrador) VALUES("${nombreUsuario}", "${esAdmin}")`)
-      console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios')))
+  console.log("Soy un pedido POST /agregarUsuario")
+  let nombreUsuario = req.body.usuario;
+  let email = req.body.email
+  let password = req.body.password
+  let esAdmin = req.body.esAdmin;
+
+  if(esAdmin == "Si"){
+    esAdmin = 1
+  } else if(esAdmin == "No"){
+    esAdmin = 0
+  }
+  
+  if(nombreUsuario == "" || esAdmin == ""){
+    console.log("Uno de los campos está vacío")   
+  }
+  else{
+    console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios')))
+    res.send({usuario: respuesta})
+
+    const { email, password } = req.body;
+
+    try {
+      await authService.registerUser(auth, { email, password});
+
+      let respuesta = await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(idUsuario, email, es_admin, nombreUsuario) VALUES("0", "${req.body.email}", ${esAdmin}, "${req.body.nombreUsuario}")`)
+      console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios_tetris')))
       res.send({usuario: respuesta})
+      // res.render("register", {
+      //   message: "Registro exitoso. Puedes iniciar sesión ahora. VERIFICA TU CASILLA DE MAIL",
+      // });
+      
+    } catch (error) {
+      console.error("Error en el registro:", error);
+      res.render("register", {
+        message: "Error en el registro: " + error.message,
+      });
     }
+
+  }
+  
+
 });
 
 app.post('/eliminarUsuario', async function(req, res)
