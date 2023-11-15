@@ -161,8 +161,8 @@ app.post('/sumarPuntaje', async function(req, res)
   console.log("Soy un pedido POST /sumarPuntaje", req.body);
   let usuariosPuntaje =  await MySQL.realizarQuery(`SELECT idUsuario FROM Puntaje_tetris`)
   for(let i= 0; i<usuariosPuntaje.length; i++) {
-    if(usuariosPuntaje[i] == req.session.userLoggeado){
-      let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris SET puntaje = puntaje + ${req.body.puntaje} WHERE idUsuario = ${req.session.userLoggeado})`)
+    if(usuariosPuntaje[i].idUsuario == req.session.userLoggeado){
+      let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris SET puntaje = puntaje + ${req.body.puntaje} WHERE idUsuario = ${req.session.userLoggeado}`)
       console.log("Usuario modificado")
       res.send({validar: true, puntaje: respuesta})
     }
@@ -217,7 +217,7 @@ app.get('/ranking', async function(req, res){
 app.get('/admin', async function(req, res)
 {
     console.log("Soy un pedido GET /iraadmin", req.query);
-    let usuarios = await MySQL.realizarQuery("SELECT usuario FROM Usuarios_tetris;");
+    let usuarios = await MySQL.realizarQuery("SELECT nombreUsuario FROM Usuarios_tetris;");
     console.log(usuarios)
     // console.log(preguntas[1].id_pregunta)
     res.render('administrador', {usuarios: usuarios});
@@ -230,12 +230,12 @@ app.post('/agregarUsuario', async function(req, res)
     let esAdmin = req.body.selectUsuarios;
     
     if(nombreUsuario == "" || esAdmin == ""){0
-        console.log("Uno de los campos está vacío")   
+      console.log("Uno de los campos está vacío")   
     }
     else{
-        let respuesta = await MySQL.realizarQuery(`INSERT INTO Usuarios(usuario, adminstrador) VALUES("${nombreUsuario}", "${esAdmin}")`)
-        console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios')))
-        res.send({usuario: respuesta})
+      let respuesta = await MySQL.realizarQuery(`INSERT INTO Usuarios(usuario, adminstrador) VALUES("${nombreUsuario}", "${esAdmin}")`)
+      console.log(await (MySQL.realizarQuery('SELECT * FROM Usuarios')))
+      res.send({usuario: respuesta})
     }
 });
 
@@ -263,7 +263,7 @@ app.post("/register", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    await authService.registerUser(auth, { email, password });
+    await authService.registerUser(auth, { email, password});
 
     await MySQL.realizarQuery(`INSERT INTO Usuarios_tetris(idUsuario, email, es_admin, nombreUsuario) VALUES("0", "${req.body.email}", 0, "${req.body.nombreUsuario}")`)
 
@@ -357,8 +357,8 @@ io.on("connection", (socket) => {
   // });
   socket.on('nombreSala', async (data) => {
     console.log("Se conecto a la sala:", data.salaNombre);
-    req.session.salaNombre = data.salaNombre
-    console.log('req.session.salaNombre: ', req.session.salaNombre)
+    // req.session.salaNombre = data.salaNombre
+    // console.log('req.session.salaNombre: ', req.session.salaNombre)
     //await MySQL.realizarQuery(`UPDATE  Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
 
 
@@ -366,30 +366,42 @@ io.on("connection", (socket) => {
   });
 
   socket.on('unirseSala', async (data) => {
+    req.session.salaNombre = data.salaNombre
     console.log("Se conecto a la sala:", req.session.salaNombre);
+    console.log('req.session.salaNombre: ', req.session.salaNombre)
     if(req.session.salaNombre != ""){
       socket.leave(req.session.salaNombre)
     }
 
     let jugadoresEnSala = await MySQL.realizarQuery(`SELECT cant_jugadores FROM Salas_tetris WHERE idSala = ${req.session.salaNombre}`)
-    console.log("jugadores en sala: ", jugadoresEnSala)
+    jugadoresEnSala = parseInt(jugadoresEnSala[0].cant_jugadores);
+    //console.log("jugadores en sala: ", jugadoresEnSala)
 
     if (jugadoresEnSala == 0) {
       socket.join(req.session.salaNombre)
       await MySQL.realizarQuery(`UPDATE Salas_tetris SET cant_jugadores = cant_jugadores + 1 where idSala = ${req.session.salaNombre};`)
       console.log("jugadores en sala: ", jugadoresEnSala)
       io.to(req.session.salaNombre).emit("server-message", {mensaje:"te conectaste a la sala"}) 
+
     } else if(jugadoresEnSala == 1){
+      socket.join(req.session.salaNombre)
       console.log("Sos el segundo jugador. La sala esta lista para empezar")
       await MySQL.realizarQuery(`UPDATE Salas_tetris SET cant_jugadores = cant_jugadores + 1 where idSala = ${req.session.salaNombre};`)
-      console.log("jugadores en sala: ", jugadoresEnSala)
-      io.to('nombreSala').emit('salaListaParaEmpezar');
-    } else if(jugadoresEnSala === 2){
-      // Si hay dos jugadores, la sala está lista para empezar
-      io.to('nombreSala').emit('salaListaParaEmpezar');
-    } else{
+      let jugadoresEnSala = await MySQL.realizarQuery(`SELECT cant_jugadores FROM Salas_tetris WHERE idSala = ${req.session.salaNombre}`)
+      jugadoresEnSala = parseInt(jugadoresEnSala[0].cant_jugadores);
+    }
+    // } else if(jugadoresEnSala === 2){
+    //   // Si hay dos jugadores, la sala está lista para empezar
+    //   io.to(req.session.salaNombre).emit('salaListaParaEmpezar');
+    else{
       console.log("ERROR")
     }
+    let jugadoresEnSala2 = await MySQL.realizarQuery(`SELECT cant_jugadores FROM Salas_tetris WHERE idSala = ${req.session.salaNombre}`)
+    jugadoresEnSala2 = parseInt(jugadoresEnSala2[0].cant_jugadores);
+    if(jugadoresEnSala2 == 2){
+      io.to(req.session.salaNombre).emit('salaListaParaEmpezar');
+    }
+
     req.session.save();
   });
 

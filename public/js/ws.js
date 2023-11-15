@@ -14,7 +14,7 @@ function uniseSala(button){
     let botonId = button.id
     //console.log("ID del boton: ", botonId);
     console.log("Enviendo info al socket")
-    socket.emit("nombreSala", {salaNombre: botonId})
+    socket.emit("unirseSala", {salaNombre: botonId})
     salaDeEspera()
 }
 
