@@ -34,6 +34,7 @@ socket.on("cuadricula", data => {
 
 socket.on('salaListaParaEmpezar', () => {
     // Muestra el botón para empezar el juego
+    location.href = "/tetris"
     document.getElementById('botonEmpezar').style.display = 'block';
 });
 

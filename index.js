@@ -403,7 +403,6 @@ io.on("connection", (socket) => {
     // console.log('req.session.salaNombre: ', req.session.salaNombre)
     //await MySQL.realizarQuery(`UPDATE  Salas_tetris WHERE jugador1 = 0 OR jugador2 = 0`)
 
-
     req.session.save();
   });
 
