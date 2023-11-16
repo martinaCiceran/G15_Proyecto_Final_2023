@@ -1,0 +1,26 @@
+
+{{!-- <form action="/option" method="post"> --}}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ELIGE UNA OPCIÓN</title>
+    </head>
+    <body>
+        <div class="contenedor">
+            {{!-- <form class="container-sm">
+                <div class="mb-3 form-check">
+                    <input type="button" class="btn btn-primary" value="1 Jugador">
+                </div>
+            </form> --}}
+
+            <form action="/tetris" method="POST" class="container-sm">
+                <div class="mb-3 form-check">
+                    <input type="submit" class="btn btn-primary" id="multijugador" onclick="uniseSala()" value="Multijugador">
+                </div>
+            </form>
+
+        </div>
+
+{{!-- </form> --}}
+
+    

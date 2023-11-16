@@ -38,6 +38,12 @@ const FORMAS = [
 ]
 
 // guardamos los colores de las piezas
+
+//colorear()
+
+
+
+/*
 const COLORES = [
     "#fff",
     "#9b5fe0",
@@ -47,11 +53,11 @@ const COLORES = [
     "#efdf48",
     "#f9a52c",
     "#d64e12"
-]
+]*/
 
 const FILAS = 20;
 const COLUMNAS = 10;
-let puntaje = 0;
+var puntaje = 0;
 
 let canvas = document.getElementById("tetris"); // agarra el primer elemento con id tetris
 let tablaPuntaje = document.querySelector('h2')
@@ -66,13 +72,43 @@ function openPopUp(){
 
 }
 
+
+/*async function colorear (){
+    let COLORES
+for (let i=0 ; i<8 ; i++)
+{
+try {
+    const colorsito = await fetch("http://x-colors.yurace.pro/api/random/", {
+      method: "GET",
+      mode: "cors",
+      credentials: "omit", 
+      headers: {
+        "Content-Type": "application/json",
+      },
+ });*/
+      
+    //En result obtengo la respuesta
+    console.log(colorsito.hex)
+    COLORES[i] = colorsito.hex
+    console.log(COLORES[i])
+  } catch (error) {
+    console.error("Error:", error);
+  }
+} 
+
+
+}
+
+
+
+
 function jugar(){
 
     let piezaObj = null;
     let cuadricula = generarCuadricula()
     console.log(cuadricula);
     // console.log(piezaObj)
-
+    enviarCuadricula(cuadricula)
 
     function generarPiezaRandom(){
         let ran = Math.floor(Math.random() * 7) // devuelve un numero random del 0 al 7 --> Math.floor() devuelve un numero sin coma
@@ -132,12 +168,12 @@ function jugar(){
             puntaje+=100;
         }
 
-        
-    
-
-        tablaPuntaje.innerHTML = 'Puntaje: ' + puntaje;
+        enviarCuadricula(cuadricula)
+ 
+        tablaPuntaje.innerHTML = puntaje;
 
     }
+
 
     function renderizarPieza(){
         let pieza = piezaObj.pieza; // llama al atributo pieza del objeto
@@ -165,10 +201,11 @@ function jugar(){
                 }
             }
             if(piezaObj.y == 0){
+                console.log("perdiste hermano")
+                enviarPuntaje(puntaje)
                 alert("Game Over")
                 cuadricula = generarCuadricula()
                 puntaje = 0
-
                 // ACA TE TIENE QUE LLEVAR A LA PAGINA DE GAME OVER
             }
             piezaObj = null;
@@ -272,23 +309,21 @@ function jugar(){
         }
     })
 
+    function enviarCuadricula(cuadricula){
+        //cuadricula = document.getElementById("tetris")
+        console.log("Enviando cuadricula al back")
+        //console.log(cuadricula)
+        socket.emit("mostrarCuadricula", {cuadricula: cuadricula})
+    }
+
+    function enviarPuntaje(puntaje){
+        console.log("Enviando PUNTAJE al back")
+        socket.emit("puntaje", {puntaje: puntaje})
+        console.log(puntaje)
+
+    }
+      
 }
-
-// function pausa(){
-//     console.log('pausaasa')
-//     for(let i = 0; i<piezaObj.pieza.length;i++){
-//         for(let j = 0;j<piezaObj.pieza[i].length;j++){
-//             if(piezaObj.pieza[i][j] == 1){
-//                 let p = piezaObj.x + j;
-//                 let q = piezaObj.y + i;
-//                 cuadricula[q][p] = piezaObj.colorIndex;
-//             }
-//         }
-//     }
-
-//     renderizarCuadricula()
-    
-// }
 
 let jugarBtn = document.getElementById('jugar-btn')
 function closePopUp(){
@@ -296,3 +331,5 @@ function closePopUp(){
     jugarBtn.classList.add('close-jugar-btn')
     jugar()
 }
+
+unirseSala()
