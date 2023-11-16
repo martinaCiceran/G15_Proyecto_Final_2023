@@ -365,6 +365,7 @@ function closePopUp(){
   jugarBtn.classList.add('close-jugar-btn')
   jugar()
 }
-
-unirseSala()
+let cartelsala = document.getElementById('sala')
+console.log(cartelsala.innerHTML)
+uniseSala(cartelsala.innerHTML)
 

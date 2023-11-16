@@ -12,7 +12,7 @@ socket.on("server-message", data => {
 
 function uniseSala(button){
     let botonId = button.id
-    //console.log("ID del boton: ", botonId);
+    console.log("ID del boton: ", botonId);
     console.log("Enviendo info al socket")
     socket.emit("unirseSala", {salaNombre: botonId})
     salaDeEspera()
@@ -122,6 +122,7 @@ async function cargarSalas(){
 
 function renderBotones(salas){
     console.log(salas)
+    console.log("id de la sala: ", salas[0].idSala)
     var html = "";
     for (let i = 0; i<salas.length; i++){
         html+= `<button id="${salas[i].idSala}" name="${salas[i].nombreSala}" onclick="uniseSala(this)">${salas[i].nombreSala}</button>`

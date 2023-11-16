@@ -147,7 +147,7 @@ app.get('/tetris', async function(req, res)
 {
   console.log(req.body);
   console.log("Soy un pedido POST /TETRIS", req.body);
-  res.render('tetris', null);
+  res.render('tetris', {sala:req.session.salaNombre});
 });
 
 app.get('/gameOver', function(req, res)
@@ -407,21 +407,21 @@ io.on("connection", (socket) => {
   });
 
   socket.on('unirseSala', async (data) => {
+    console.log("socket unirse sala, data=",data.salaNombre)
     req.session.salaNombre = data.salaNombre
     console.log("Se conecto a la sala:", req.session.salaNombre);
     console.log('req.session.salaNombre: ', req.session.salaNombre)
     if(req.session.salaNombre != ""){
       socket.leave(req.session.salaNombre)
     }
-
     let jugadoresEnSala = await MySQL.realizarQuery(`SELECT cant_jugadores FROM Salas_tetris WHERE idSala = ${req.session.salaNombre}`)
     jugadoresEnSala = parseInt(jugadoresEnSala[0].cant_jugadores);
-    //console.log("jugadores en sala: ", jugadoresEnSala)
+    console.log("jugadores en sala: ", jugadoresEnSala)
 
     if (jugadoresEnSala == 0) {
       socket.join(req.session.salaNombre)
       await MySQL.realizarQuery(`UPDATE Salas_tetris SET cant_jugadores = cant_jugadores + 1 where idSala = ${req.session.salaNombre};`)
-      console.log("jugadores en sala: ", jugadoresEnSala)
+      //console.log("jugadores en sala: ", jugadoresEnSala)
       io.to(req.session.salaNombre).emit("server-message", {mensaje:"te conectaste a la sala"}) 
 
     } else if(jugadoresEnSala == 1){
@@ -446,12 +446,12 @@ io.on("connection", (socket) => {
     req.session.save();
   });
 
-
+/*
   socket.on('unirseSala', async (data) => {
     console.log("socket unirseSala")
     console.log("Se conecto a la sala:", req.session.salaNombre);
     req.session.save();
-  });
+  });*/
 
   socket.on('mostrarCuadricula', async (data) => {
     console.log(req.session.userLoggeado)
