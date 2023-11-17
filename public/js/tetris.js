@@ -1,4 +1,3 @@
-// creamos las formas de las piezas del tetris
 const FORMAS = [ 
     [
         [0, 1, 0, 0],
@@ -51,7 +50,7 @@ const COLORES = [
 
 const FILAS = 20;
 const COLUMNAS = 10;
-let puntaje = 0;
+puntaje = 0;
 
 let canvas = document.getElementById("tetris"); // agarra el primer elemento con id tetris
 let tablaPuntaje = document.querySelector('h2')
@@ -63,7 +62,6 @@ ctx.scale(30,30) // 30 * 20(filas) = 600(handlebaras) -- 30 * 10(filas) = 300(ha
 let popup = document.getElementById('popup')
 function openPopUp(){
     popup.classList.add('open-popup');
-
 }
 
 
@@ -133,7 +131,7 @@ function jugar(){
             puntaje+=100;
         }
  
-        tablaPuntaje.innerHTML = 'Puntaje: ' + puntaje;
+        tablaPuntaje.innerHTML = puntaje;
 
     }
 
@@ -164,10 +162,7 @@ function jugar(){
                 }
             }
             if(piezaObj.y == 0){
-                alert("Game Over")
-                location.href = "/gameOver";
-                cuadricula = generarCuadricula()
-                puntaje = 0
+                puntajeFuncion()
 
                 // ACA TE TIENE QUE LLEVAR A LA PAGINA DE GAME OVER
             }
@@ -272,11 +267,48 @@ function jugar(){
         }
     })
 
+
+    async function fetchPuntaje(data) {
+        try {
+            const response = await fetch("/sumarPuntaje", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+    
+            const result = await response.json();
+            console.log("Success:", result);
+            console.log("genial martu :)");
+            
+            location.href = "/gameOver";
+    
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+    
+    
+    function puntajeFuncion() {
+        console.log(puntaje);
+
+        let data = {
+            puntaje: puntaje
+        };
+
+        // Llama a la función fetchPuntaje para enviar el puntaje al servidor
+        fetchPuntaje(data);
+    }
+
 }
 
+
+
+
 let jugarBtn = document.getElementById('jugar-btn')
-function closePopUp(){
+function closePopUp() {
     popup.classList.remove('open-popup');
-    jugarBtn.classList.add('close-jugar-btn')
-    jugar()
+    jugarBtn.classList.remove('close-jugar-btn');
+    jugar();
 }

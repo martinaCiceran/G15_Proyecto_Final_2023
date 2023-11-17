@@ -51,9 +51,12 @@ app.get('/', function(req, res)
     res.render('inicio', null);
 });
 
-app.get('/tetris', async function(req, res)
+app.post('/tetris', async function(req, res)
 {   console.log(req.query);
-    //await MySQL.realizarQuery(`INSERT INTO PuntosExpo(usuario) VALUES("${req.body.violeta}"`)
+    await MySQL.realizarQuery(`INSERT INTO PuntosExpo(usuario) VALUES("${req.body.nombreDeUsuario}")`)
+    let usuario = await MySQL.realizarQuery(`SELECT id FROM PuntosExpo WHERE usuario = "${req.body.nombreDeUsuario}"`)
+    req.session.user = usuario
+    console.log(req.session.user[0].id)
     res.render('tetris', null);
 });
 
@@ -66,19 +69,27 @@ app.get('/gameOver', function(req, res)
 app.post('/sumarPuntaje', async function(req, res)
 {
     console.log("Soy un pedido POST /sumarPuntaje", req.body);
-    let respuesta = await MySQL.realizarQuery(`Update Puntaje_tetris(puntaje) SET("${req.body.puntaje}" WHERE usuario == ${req.session.user})`)
-    console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje')))
+    let respuesta = await MySQL.realizarQuery(`Update PuntosExpo SET puntaje = ${req.body.puntaje} WHERE id = ${req.session.user[0].id}`)
+    console.log(await (MySQL.realizarQuery('SELECT * FROM PuntosExpo')))
     res.send({puntaje: respuesta})
 });
 
-// app.post('/leerPreguntas', async function(req, res)
-// {
-//     console.log("Soy un pedido POST", req.body);
-//     let respuesta = await MySQL.realizarQuery(`SELECT * FROM Preguntas WHERE id_pregunta = ${req.body.id}`)
 
-//     res.send({pregunta: respuesta[0]})
+// app.post('/sumarPuntaje', async function(req, res) {
+//     console.log("Soy un pedido POST /sumarPuntaje", req.body);
 
-// })
+//     // Asumiendo que estás usando un sistema de base de datos, por ejemplo, MySQL
+//     // Aquí se realiza la actualización del puntaje en la base de datos
+//     try {
+//         await MySQL.realizarQuery(`UPDATE PuntosExpo SET puntaje = ${req.body.puntaje} WHERE id = ${req.session.user[0].id}`);
+//         console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje_tetris'))); // Corregí el nombre de la tabla
+//         res.send({ puntaje: req.body.puntaje });
+//     } catch (error) {
+//         console.error("Error:", error);
+//         res.status(500).send("Error interno del servidor");
+//     }
+// });
+
 
 app.get('/logout', function(req, res)
 {
@@ -114,51 +125,10 @@ app.post('/ranking', async function(req, res){
 
 app.post('/tablaRanking', async function(req, res){
     console.log("Pedido get /tablaRanking :)")
-    //let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM PuntosExpo ORDER BY puntaje DESC')
-    //console.log(usuario_puntaje)
-    res.render('tablaRanking', /*{puntaje: usuario_puntaje}*/);
+    let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM PuntosExpo ORDER BY puntaje DESC')
+    console.log(usuario_puntaje)
+    res.render('tablaRanking', {puntaje: usuario_puntaje});
 })
-
-// app.post('/mostrarPregunta', async(req, res) => {
-//     try {
-//         const indice = req.body.indicePreguntaActual
-//         console.log(indice)
-//             // Realizar la consulta SQL para obtener las preguntas y respuestas desde la base de datos
-//         let result = await MySQL.realizarQuery(`SELECT id_pregunta, pregunta, opcion_1, 
-//         opcion_2, opcion_3, opcion_correcta FROM Preguntas WHERE id_pregunta = "${indice}"`);
-
-//         console.log(result)
-//         // Formatear los datos según sea necesario. row representa cada fila de la base de datos en cada iteración.
-//         // map  se utiliza para iterar sobre cada elemento (fila) del arreglo result y aplicar una función a cada elemento. 
-//         // En este caso, se está transformando cada fila en un nuevo objeto que contiene la información deseada.
-
-//         /* const preguntasRespuestas = result.map(row => ({
-//             id_pregunta: row.id_pregunta,
-//             pregunta: row.pregunta,
-//             opciones: [row.opcion_1, row.opcion_2, row.opcion_3, row.opcion_correcta]
-//         })); */
-
-//         if (result.length == 0) {
-//             //res.redirect('/tablaRanking');
-//             res.send([{validar: false}])
-//         } else {
-//             const preguntasRespuestas = result.map(row => ({
-//                 id_pregunta: row.id_pregunta,
-//                 pregunta: row.pregunta,
-//                 opciones: [row.opcion_1, row.opcion_2, row.opcion_3, row.opcion_correcta],
-//                 validar: true
-//             }));
-    
-//             // Enviar los datos como respuesta al cliente
-//             res.send(preguntasRespuestas);
-//         }
-
-        
-//     } catch (error) {
-//         console.error("Error:", error);
-//     }
-// });
-
 
 // app.put('/login', function(req, res) {
 //     //Petición PUT con URL = "/login"

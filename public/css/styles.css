@@ -101,11 +101,10 @@ button {
 
 
 
-#gris{
+#gris, #jugar-btn{
     width: 100px;
     margin-top: 20px;
     margin: 20px;
-    padding: 10px 40px;
     text-align: center;
     text-decoration: none;
     outline: none;
