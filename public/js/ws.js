@@ -148,17 +148,19 @@ async function salaDeEspera(){
     
 }
 
-async function changeScreenTetris(){
-    let salas = await fetchSalas()
-    const tetris = document.getElementById("tetris")
-    const salasDisponibles = document.getElementById("salas")
-    const salaDeEspera = document.getElementById("salaDeEspera")
-    if(salas.salas.cant_jugadores == 2){
+async function changeScreenTetris() {
+    let salas = await fetchSalas();
+    console.log("SALAS: ", salas)
+    console.log("CANT_JUGADORES: ", salas.salas[0].cant_jugadores)
+    const tetris = document.getElementById("sectionTetris");
+    const salasDisponibles = document.getElementById("salas");
+    const salaDeEspera = document.getElementById("salaDeEspera");
+
+    if(salas.salas[0].cant_jugadores == 2) {
         salaDeEspera.style.display = "none";
-        salasDisponibles.style.display = "none"
-        tetris.style.display = ""
-        
+        salasDisponibles.style.display = "none";
+        tetris.style.display = ""; // Mostrar el elemento con id "tetris"
     } else {
-        console.log("rendite hermana")
+        console.log("rendite hermana");
     }
 }

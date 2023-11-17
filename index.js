@@ -160,21 +160,7 @@ app.get('/gameOver', function(req, res)
 app.post('/sumarPuntaje', async function(req, res)
 {
   console.log("Soy un pedido POST /sumarPuntaje", req.body);
-  let usuariosPuntaje =  await MySQL.realizarQuery(`SELECT idUsuario FROM Puntaje_tetris`)
-  for(let i= 0; i<usuariosPuntaje.length; i++) {
-    if(usuariosPuntaje[i].idUsuario == req.session.userLoggeado){
-      let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris SET puntaje = puntaje + ${req.body.puntaje} WHERE idUsuario = ${req.session.userLoggeado}`)
-      console.log("Usuario modificado")
-      res.send({validar: true, puntaje: respuesta})
-    }
-    else{
-      let respuesta = await MySQL.realizarQuery(`INSERT INTO Puntaje_tetris(idUsuario, puntaje) VALUES(${req.session.userLoggeado}, "${req.body.puntaje}")`)
-      console.log("Usuario ingresado")
-      res.send({validar: true, puntaje: respuesta})
-    }
-    res.send({validar: true, puntaje: respuesta})
-  }
-  console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje_tetris')))
+  
   
 });
 
@@ -464,9 +450,27 @@ io.on("connection", (socket) => {
 
   });
 
-  socket.on('puntaje', data => {
+  socket.on('puntaje', async data => {
     console.log("SOCKET PUNTAJE")
     console.log("puntaje: ", data.puntaje)
+
+    let usuariosPuntaje =  await MySQL.realizarQuery(`SELECT idUsuario FROM Puntaje_tetris`)
+
+    for(let i= 0; i<usuariosPuntaje.length; i++) {
+      if(usuariosPuntaje[i].idUsuario == req.session.userLoggeado){
+        let respuesta = await MySQL.realizarQuery(`UPDATE Puntaje_tetris SET puntaje = puntaje + ${req.body.puntaje} WHERE idUsuario = ${req.session.userLoggeado}`)
+        console.log("Usuario modificado")
+        res.send({validar: true, puntaje: respuesta})
+      }
+      else{
+        let respuesta = await MySQL.realizarQuery(`INSERT INTO Puntaje_tetris(idUsuario, puntaje) VALUES(${req.session.userLoggeado}, ${req.body.puntaje})`)
+        console.log("Usuario ingresado")
+        res.send({validar: true, puntaje: respuesta})
+      }
+      res.send({validar: true, puntaje: respuesta})
+    }
+    console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje_tetris')))
+
   });
 
   // socket.on('salasDisponibles', async data => {

@@ -18,14 +18,20 @@ body{
     box-shadow: 0 0 10px 0 lightgrey;
 }
 
+/* #sectionTetris{
+    width: 100%;
+    height: 100%;
+    align-items: center;
+} */
+
 #puntaje{
     margin-top: 70px;
     margin-bottom: 30px;
 }
 
 .container{
-    width: 100%;
-    height: 100vh;
+    width: 1px;
+    height: 1px;
     display: flex;
     align-items: center;
     justify-content: center;
