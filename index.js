@@ -142,13 +142,14 @@ app.get('/color', async function(req, res)
   res.send({/*colorBlanco: colorBlanco, color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, color6: color6, color7: color7*/ colorsitos: colorsitos});
 });
 
-
+/*
 app.get('/tetris', async function(req, res)
 {
   console.log(req.body);
   console.log("Soy un pedido POST /TETRIS", req.body);
   res.render('tetris', {sala:req.session.salaNombre});
 });
+*/
 
 app.get('/gameOver', function(req, res)
 {
@@ -428,8 +429,8 @@ io.on("connection", (socket) => {
       socket.join(req.session.salaNombre)
       console.log("Sos el segundo jugador. La sala esta lista para empezar")
       await MySQL.realizarQuery(`UPDATE Salas_tetris SET cant_jugadores = cant_jugadores + 1 where idSala = ${req.session.salaNombre};`)
-      let jugadoresEnSala = await MySQL.realizarQuery(`SELECT cant_jugadores FROM Salas_tetris WHERE idSala = ${req.session.salaNombre}`)
-      jugadoresEnSala = parseInt(jugadoresEnSala[0].cant_jugadores);
+      //let jugadoresEnSala = await MySQL.realizarQuery(`SELECT cant_jugadores FROM Salas_tetris WHERE idSala = ${req.session.salaNombre}`)
+      //jugadoresEnSala = parseInt(jugadoresEnSala[0].cant_jugadores);
     }
     // } else if(jugadoresEnSala === 2){
     //   // Si hay dos jugadores, la sala está lista para empezar

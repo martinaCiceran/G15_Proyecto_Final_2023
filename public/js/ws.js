@@ -34,7 +34,8 @@ socket.on("cuadricula", data => {
 
 socket.on('salaListaParaEmpezar', () => {
     // Muestra el botón para empezar el juego
-    location.href = "/tetris"
+    //location.href = "/tetris"
+    changeScreenTetris()
     document.getElementById('botonEmpezar').style.display = 'block';
 });
 
@@ -134,7 +135,6 @@ async function salaDeEspera(){
     let salas = await fetchSalas()
     const salasDisponibles = document.getElementById("salas")
     const salaDeEspera = document.getElementById("salaDeEspera")
-    var html = "";
 
     if(salas.salas.jugador1 == null && salas.salas.jugador2 != null || salas.salas.jugador1 != null && salas.salas.jugador2 == null){
         console.log('???')
@@ -145,15 +145,20 @@ async function salaDeEspera(){
         salaDeEspera.style.display = "";
         salasDisponibles.style.display = "none"
     }
-
     
-    if(salas.salas.jugador1 != null && salas.salas.jugador2 != null){
-            
-        html+= ` <form action="/tetris" method="GET" class="container-sm">
-                    <div class="mb-3 form-check">
-                        <input type="submit" class="btn btn-primary" value="Empezar">
-                    </div>
-                </form>`
-        document.getElementById("salaDeEspera").innerHTML += html
+}
+
+async function changeScreenTetris(){
+    let salas = await fetchSalas()
+    const tetris = document.getElementById("tetris")
+    const salasDisponibles = document.getElementById("salas")
+    const salaDeEspera = document.getElementById("salaDeEspera")
+    if(salas.salas.cant_jugadores == 2){
+        salaDeEspera.style.display = "none";
+        salasDisponibles.style.display = "none"
+        tetris.style.display = ""
+        
+    } else {
+        console.log("rendite hermana")
     }
 }
