@@ -165,6 +165,7 @@ function jugar(){
             }
             if(piezaObj.y == 0){
                 alert("Game Over")
+                location.href = "/gameOver";
                 cuadricula = generarCuadricula()
                 puntaje = 0
 
