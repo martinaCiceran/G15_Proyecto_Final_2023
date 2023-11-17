@@ -373,4 +373,19 @@ io.on("connection", (socket) => {
   
 });
 
+ //PUNTAJE RANKING
+ app.post('/ranking', async function(req, res){
+  console.log("Pedido post /ranking :)")
+  let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
+  console.log(usuario_puntaje)
+  res.render('ranking', {puntaje: usuario_puntaje});
+})
+app.get('/ranking', async function(req, res){
+  console.log("Pedido get /ranking :)")
+  let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
+  console.log(usuario_puntaje)
+  res.render('ranking', {puntaje: usuario_puntaje});
+})
+
+
 //setInterval(() => io.emit("server-message", {mensaje:"MENSAJE DEL SERVIDOR"}), 2000);

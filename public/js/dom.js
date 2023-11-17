@@ -226,3 +226,15 @@ async function fetchAgregarUsuario(data){
   //   fetchEditarUsuario(usuarioModificado)
   //   //let pregunta = fetchEditarPregunta(ID_pregunta)
   // }
+
+  function mostrarRanking() {
+    // Realiza la solicitud de redireccionamiento al servidor
+    fetch('/redireccion', { method: 'GET' })
+      .then(() => {
+        // Redirige a la página principal cuando se complete la solicitud
+        window.location.href = '/ranking';
+      })
+      .catch(err => {
+        console.error('Error al redirigir:', err);
+      });
+  }
