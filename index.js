@@ -51,9 +51,9 @@ app.get('/', function(req, res)
     res.render('inicio', null);
 });
 
-app.get('/tetris', function(req, res)
-{
-    console.log(req.query);
+app.get('/tetris', async function(req, res)
+{   console.log(req.query);
+    //await MySQL.realizarQuery(`INSERT INTO PuntosExpo(usuario) VALUES("${req.body.violeta}"`)
     res.render('tetris', null);
 });
 
@@ -63,44 +63,12 @@ app.get('/gameOver', function(req, res)
     res.render('gameOver', null);
 });
 
-
-app.get('/registro', function(req, res)
-{
-    console.log("Soy un pedido GET", req.query);
-    res.render('registro', null);
-});
-
 app.post('/sumarPuntaje', async function(req, res)
 {
     console.log("Soy un pedido POST /sumarPuntaje", req.body);
     let respuesta = await MySQL.realizarQuery(`Update Puntaje_tetris(puntaje) SET("${req.body.puntaje}" WHERE usuario == ${req.session.user})`)
     console.log(await (MySQL.realizarQuery('SELECT * FROM Puntaje')))
     res.send({puntaje: respuesta})
-});
-
-app.get('/login', function(req, res)
-{
-    console.log("Soy un pedido GET", req.query);
-    res.render('login', null);
-});
-
-app.get('/admin', async function(req, res)
-{
-    console.log("Soy un pedido GET /iraadmin", req.query);
-    // let preguntas = await MySQL.realizarQuery("SELECT id_pregunta FROM Preguntas;");
-    //console.log(preguntas)
-    // console.log(preguntas[1].id_pregunta)
-    res.render('administrador', null/*{preguntas: preguntas}*/);
-});
-
-
-app.post('/login', async function(req, res)
-{
-    //Petición POST con URL = "/login"
-    console.log("Soy un pedido POST /login", req.body);
-    let respuesta = await MySQL.realizarQuery(`SELECT * FROM Usuarios WHERE usuario = "${req.body.usuario}" AND password = "${req.body.contraseña}"`)
-    req.session.user = req.body.usuario
-    
 });
 
 // app.post('/leerPreguntas', async function(req, res)
@@ -131,53 +99,10 @@ app.get('/logout', function(req, res)
 //     res.render('inicio', null);
 // });
 
-app.get('/home-admin', function(req, res)
-{
-    console.log("Soy un pedido GET", req.query);
-    res.render('home-admin', null);
-});
-
 // app.post('/home', function(req, res)
 // {
 //     console.log("Soy un pedido POST", req.body);
 //     res.render('home', null);
-// });
-
-// app.post('/modificarPregunta', async function(req, res)
-// {
-//     console.log("Modificar pregunta :)")
-    
-//     console.log("Soy un pedido POST /modificarPregunta");
-//     let respuesta = await MySQL.realizarQuery(`UPDATE Preguntas SET pregunta = "${req.body.pregunta}", opcion_1 = "${req.body.op_1}", opcion_2 = "${req.body.op_2}", opcion_3 = "${req.body.op_3}", opcion_correcta = "${req.body.op_correcta}" WHERE id_pregunta = ${req.body.id}`)
-//     res.send({preguntaMod: respuesta})
-// });
-
-// app.post('/agregarPregunta', async function(req, res)
-// {
-//     console.log("Agregar pregunta :)")
-//     let preg = req.body.pregunta;
-//     let op1 = req.body.op_1;
-//     let op2 = req.body.op_2;
-//     let op3 = req.body.op_3;
-//     let opCorrecta = req.body.op_correcta;
-    
-//     if(preg == "" || op1 == "" || op2 == "" || op3 == "" || opCorrecta == ""){0
-//         console.log("Uno de los campos esta vacio")   
-//     }
-//     else{
-//         let respuesta = await MySQL.realizarQuery(`INSERT INTO Preguntas(pregunta, opcion_1, opcion_2, opcion_3, opcion_correcta) VALUES("${preg}", "${op1}", "${op2}", "${op3}", "${opCorrecta}")`)
-//         console.log(await (MySQL.realizarQuery('SELECT * FROM Preguntas')))
-//         res.send({preguntaNueva: respuesta})
-//     }
-// });
-
-// app.post('/eliminarPregunta', async function(req, res)
-// {
-//     console.log("Modificar pregunta :)")
-    
-//     console.log("Soy un pedido POST /modificarPregunta");
-//     let respuesta = await MySQL.realizarQuery(`DELETE FROM Preguntas WHERE id_pregunta = ${req.body.id}`)
-//     res.send({preguntaMod: respuesta})
 // });
 
 app.post('/ranking', async function(req, res){
@@ -187,9 +112,9 @@ app.post('/ranking', async function(req, res){
     res.render('ranking', null/*{puntaje: usuario_puntaje}*/);
 })
 
-app.get('/tablaRanking', async function(req, res){
+app.post('/tablaRanking', async function(req, res){
     console.log("Pedido get /tablaRanking :)")
-    //let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
+    //let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM PuntosExpo ORDER BY puntaje DESC')
     //console.log(usuario_puntaje)
     res.render('tablaRanking', /*{puntaje: usuario_puntaje}*/);
 })
