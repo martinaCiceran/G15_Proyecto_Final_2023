@@ -187,12 +187,12 @@ app.post('/ranking', async function(req, res){
     res.render('ranking', null/*{puntaje: usuario_puntaje}*/);
 })
 
-// app.get('/tablaRanking', async function(req, res){
-//     console.log("Pedido get /tablaRanking :)")
-//     let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
-//     console.log(usuario_puntaje)
-//     res.render('tablaRanking', {puntaje: usuario_puntaje});
-// })
+app.get('/tablaRanking', async function(req, res){
+    console.log("Pedido get /tablaRanking :)")
+    //let usuario_puntaje = await MySQL.realizarQuery('SELECT * FROM Puntaje ORDER BY puntaje DESC')
+    //console.log(usuario_puntaje)
+    res.render('tablaRanking', /*{puntaje: usuario_puntaje}*/);
+})
 
 // app.post('/mostrarPregunta', async(req, res) => {
 //     try {

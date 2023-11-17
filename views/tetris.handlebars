@@ -1,15 +1,17 @@
-<h2 id="puntaje">Puntaje: 0</h2>
-<canvas id="tetris" height="600" width="300"></canvas>
-<br>
-<button type="button" onclick="openPopUp()" id="jugar-btn">JUGAR</button>
-{{!-- <button type="button" onclick="pausa()">PAUSA</button> --}}
+<body id="bodyy" style="background-image: url(img/fondoso.png);">
+    <h2 id="puntaje">Puntaje: 0</h2>
+    <canvas id="tetris" height="600" width="300"></canvas>
+    <br>
+    <button type="button" onclick="openPopUp()" id="gris">JUGAR</button>
+    {{!-- <button type="button" onclick="pausa()">PAUSA</button> --}}
 
-<div class="container">
-    <div class="popup" id="popup">
-        <h2>Instrucciones</h2>
-        <img src="img/instrucciones.png">
-        <button type="button" onclick="closePopUp()">OK</button>
+    <div class="container">
+        <div class="popup" id="popup">
+            <h2>Instrucciones</h2>
+            <img src="img/instrucciones.png">
+            <button type="button" onclick="closePopUp()" class="gris1">OK</button>
+        </div>
     </div>
-</div>
 
-<script src="/js/tetris.js"></script> 
+    <script src="/js/tetris.js"></script> 
+</body>
