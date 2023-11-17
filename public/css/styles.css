@@ -84,12 +84,12 @@ button {
     width: 100px;
     margin-top: 20px;
     padding: 10px 0;
-    background-color: #6fd649;
+    background-color: #342162;
     color: white;
     border: 0;
     outline: none;
     font-size: 18px;
-    border-radius: 4px;
+    border-radius: 50px;
     cursor: pointer;
     visibility: visible;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -128,7 +128,7 @@ button {
     text-decoration: none;
     outline: none;
     color: #ffffff;
-    background-color: #8036ac ;
+    background-color: #342162  ;
     border-color:  #000000;
     border-radius: 50px;
     justify-content: center;
@@ -155,7 +155,8 @@ button {
     margin: 60px 20px;
     transition: 0.3s;
     margin-left: 30px;
-      
+    display: block;
+    margin: 0 auto;
       
 }
   
@@ -172,17 +173,6 @@ button {
     margin: 100px;
 }
 
-#gris1 {
-    background-color: #ddd;
-    border: none;
-    border-radius: 50px;
-    color: black;
-    padding: 26px 70px;
-    text-align: center;
-    font-size: 16px;
-    margin: 60px 20px;
-    transition: 0.3s;
-}
   
 #gris1:hover {
 background-color: #342162 ;
@@ -197,8 +187,8 @@ color:#6f58a5  ;
 #boxblanco{
     box-shadow: #ffffff;
     background-color: #ffffff;
-    width: 38%;
-    height: 95%;
+    width: 700px;
+    height: auto;
     border-radius: 50px;
     display: flex;
     justify-content: center;
@@ -226,6 +216,11 @@ color:#6f58a5  ;
     margin: 0 490px;
 }
 
+#horizontal2{
+display: flex;
+justify-content: center;
+margin: 0 490px;
+}
 #gris1 {
     background-color: #ddd;
     border: none;
@@ -257,6 +252,11 @@ color:#6f58a5  ;
 
 .form-inicio {
     margin: auto;
+    align-items: center;
+}
+
+#inicio{
+    align-items: center;
 }
 
 #www1{

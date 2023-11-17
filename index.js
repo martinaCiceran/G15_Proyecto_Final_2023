@@ -69,7 +69,7 @@ app.get('/gameOver', function(req, res)
 app.post('/sumarPuntaje', async function(req, res)
 {
     console.log("Soy un pedido POST /sumarPuntaje", req.body);
-    let respuesta = await MySQL.realizarQuery(`Update PuntosExpo SET puntaje = ${req.body.puntaje} WHERE id = ${req.session.user[0].id}`)
+    let respuesta = await MySQL.realizarQuery(`Update PuntosExpo SET puntaje = puntaje + ${req.body.puntaje} WHERE id = ${req.session.user[0].id}`)
     console.log(await (MySQL.realizarQuery('SELECT * FROM PuntosExpo')))
     res.send({puntaje: respuesta})
 });
