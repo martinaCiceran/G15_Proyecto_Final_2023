@@ -1,0 +1,67 @@
+{{!-- <form action="/option" method="post"> --}}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ELIGE UNA OPCIÓN</title>
+    </head>
+    <body>
+        <section id="sectionTetris" style="display: none;">
+            {{!-- <h3>Puntaje</h3> --}}
+            <h2 id="puntaje">0</h2>
+            <h2 id="sala">{{sala}}</h2>
+            <div id="canva">
+                <canvas id="tetris" height="600" width="300"></canvas>
+                <canvas id="tetris2" height="300" width="150"></canvas>
+            </div>
+            <br>
+            <button type="button" onclick="openPopUp()" id="jugar-btn">JUGAR</button>
+            {{!-- <button type="button" onclick="pausa()">PAUSA</button> --}}
+
+            <div class="container">
+                <div class="popup" id="popup">
+                    <h2>Instrucciones</h2>
+                    <img src="img/instrucciones.png">
+                    <button type="button" onclick="closePopUp()">OK</button>
+                </div>
+            </div>
+
+            
+        </section>
+        <section id="salas">
+            <script>
+            window.onload = function() {
+                cargarSalas(); // Esta función se ejecutará cuando la página se cargue
+            }
+            </script>
+
+            <h3>Elija una sala</h3>
+
+            <section id="crearSala">
+                <h3>Crear Sala</h3>
+            </section>
+
+            <section id="botones">
+                <h3>Sala de espera</h3>
+                <div id="listadoSalas">
+
+                </div>
+            </section>
+            <div class="contenedor">
+                <div class="mb-3 form-check">
+                    <button id="multijugador" name="multijugador" onclick="uniseSala(this)">multijugador</button>
+                </div>
+
+            </div>
+        </section>
+        <section id="salaDeEspera" style="display: none;">
+            <h3>SALA DE ESPERA</h3>
+            <h5>Esperando a otro jugador</h5>
+        </section>
+        <script src="/js/tetris.js"></script> 
+    </body>
+
+{{!-- </form> --}}
+
+    
+
+    
