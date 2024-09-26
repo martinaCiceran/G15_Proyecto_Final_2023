@@ -1,22 +1,31 @@
-<div id="contenedor">
-    <img src="img/ODS_logo.png">
-</div>
+<br>
 
-<section>
-    <form action="/tetris" method="GET"  class="form-inicio">
-        <div>
-            <input type="submit" class="botones" value="Juagar de nuevo">
-        </div>
-    </form>
-    <form action="/ranking" method="POST" class="form-inicio">
-        <div>
-            <input type="submit" 
-            class="botones" value="Ranking">
-        </div>
-    </form>
-    <form action="/logOut" method="GET" class="container-sm">
-        <div class="mb-3 form-check">
-            <input type="submit" class="btn btn-primary" value="Log out">
-        </div>
-    </form>
-</section>
+<body id="bodyy" style="background-image: url(img/bello.png);" >
+    <div id="contenedor">
+        <img src="img/gameover.png">
+    </div>
+    
+    <section class="center-content" id="horizontal1">
+        <form action="/tetris" method="GET"  class="form-inicio">
+            <div>
+                <input type="submit" class="botones" value="Jugar de nuevo" id="gris1">
+            </div>
+        </form>
+        <form action="/ranking" method="POST" class="form-inicio" >
+            <div>
+                <input type="submit" class="botones" value="Ranking" id="gris1">
+            </div>
+        </form>
+        <form action="/logOut" method="GET" class="form-inicio">
+            <div>
+                <input type="submit" class="botones" value="Log out"id="www1" >
+            </div>
+        </form>
+    </section>
+</body>
+
+{{!-- /* "container-sm" */ --}}
+{{!-- class="mb-3 form-check" --}}
+ {{!-- <div>
+            <input type="submit" class="btn btn-primary" value="Log out"id="www1" >
+        </div> --}}
